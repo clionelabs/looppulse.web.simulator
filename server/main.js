@@ -6,6 +6,10 @@ function addMilliseconds(date, ms) {
   return new Date(date + ms);
 }
 
+function dateToString(date) {
+  return date;
+}
+
 function generateRangeEvent(visitor, path, beaconConfig) {
     var delay = path.delay;
     var enteredAt = addMilliseconds(startTime, delay);
@@ -18,7 +22,7 @@ function generateRangeEvent(visitor, path, beaconConfig) {
           "major": beaconConfig.major,
           "minor": beaconConfig.minor,
           "visitor_uuid": visitor.uuid,
-          "created_at": enteredAt
+          "created_at": dateToString(enteredAt)
         }
     };
 }
@@ -46,7 +50,7 @@ function generateEvents(visitor, path, beaconConfig) {
         "major": beaconConfig.major,
         "minor": beaconConfig.minor,
         "visitor_uuid": visitor.uuid,
-        "created_at": exitedAt
+        "created_at": dateToString(exitedAt)
       }
     });
 
@@ -63,10 +67,13 @@ _.each(simulationConfig.Visitors, function(visitor, key) {
   }
 );
 
-console.log("count:" + pendingEvents.length);
+console.log("count: " + pendingEvents.length);
+
+firebase = new Firebase(simulationConfig.Firebase);
 
 pendingEvents.forEach(function(event) {
   setTimeout(function() {
     console.log("event: " + Date.now() + JSON.stringify(event));
+    firebase.push(event.data);
   }, event.delay);
 });
