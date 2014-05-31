@@ -29,7 +29,7 @@ function generateExitEvent(visitor, path, beaconConfig) {
   setTimeout(function() {
       var event = new ExitEvent(visitor, path, beaconConfig);
       event.save();
-  }, path.delay + path.duration);
+  }, path.duration);
 }
 
 function generateEvents(visitor, path, beaconConfig) {
@@ -40,7 +40,9 @@ function generateEvents(visitor, path, beaconConfig) {
 _.each(simulationConfig.Visitors, function(visitor, key) {
     visitor.Paths.forEach(function(path) {
       var beaconConfig = simulationConfig.Beacons[path.beacon];
-      generateEvents(visitor, path, beaconConfig);
+      setTimeout(function() {
+          generateEvents(visitor, path, beaconConfig);
+      }, path.delay);
     });
   }
 );
