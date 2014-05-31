@@ -1,4 +1,4 @@
-@Events = new Meteor.Collection()
+@Events = new Meteor.Collection(null)
 
 addMilliseconds = (date, ms) ->
   return new Date(date + ms)
@@ -25,7 +25,7 @@ class RangeEvent extends Event
 
 class ExitEvent extends Event
   constructor: (visitor, path, beaconConfig) ->
-    super(isitor, path, beaconConfig)
+    super(visitor, path, beaconConfig)
     @type = "didExitRegion"
 
 
