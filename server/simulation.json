@@ -1,5 +1,7 @@
 {
   "Firebase": "https://looppulse-simulator.firebaseio.com/beacon_events",
+  "ForceReset": true,
+
   "Beacons": {
     "BeaconBlue": {
       "uuid": "B9407F30-F5F8-466E-AFF9-25556B57FE6D",
@@ -20,7 +22,7 @@
         {
           "beacon": "BeaconBlue",
           "delay": 1000,
-          "duration": 3000
+          "duration": 6000
         },
         {
           "beacon": "BeaconGreen",

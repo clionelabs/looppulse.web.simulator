@@ -7,31 +7,31 @@ function addMilliseconds(date, ms) {
 }
 
 function dateToString(date) {
-  return date;
+  return date.toString();
 }
 
-function generateRangeEvent(visitor, path, beaconConfig) {
-    var delay = path.delay;
-    var enteredAt = addMilliseconds(startTime, delay);
-    var pendingEvents = [];
-    return {
-        delay: delay,
-        data: {
-          "type": "didRangeBeacons",
-          "uuid": beaconConfig.uuid,
-          "major": beaconConfig.major,
-          "minor": beaconConfig.minor,
-          "visitor_uuid": visitor.uuid,
-          "created_at": dateToString(enteredAt)
-        }
-    };
+function generateRangeEvent(visitor, path, beaconConfig, extra_delay) {
+  var extra_delay = extra_delay || 0;
+  var delay = path.delay + extra_delay;
+  var enteredAt = addMilliseconds(startTime, delay);
+  var pendingEvents = [];
+  return {
+      delay: delay,
+      data: {
+        "type": "didRangeBeacons",
+        "uuid": beaconConfig.uuid,
+        "major": beaconConfig.major,
+        "minor": beaconConfig.minor,
+        "visitor_uuid": visitor.uuid,
+        "created_at": dateToString(enteredAt)
+      }
+  };
 }
 
 function generateRangeEvents(visitor, path, beaconConfig) {
   var events = [];
   _(5).times(function (n) {
-      var event = generateRangeEvent(visitor, path, beaconConfig);
-      event.delay += n * 10;
+      var event = generateRangeEvent(visitor, path, beaconConfig, n * 1000);
       events.push(event);
   });
   return events;
@@ -70,6 +70,9 @@ _.each(simulationConfig.Visitors, function(visitor, key) {
 console.log("count: " + pendingEvents.length);
 
 firebase = new Firebase(simulationConfig.Firebase);
+if (simulationConfig.ForceReset) {
+  firebase.remove();
+}
 
 pendingEvents.forEach(function(event) {
   setTimeout(function() {
