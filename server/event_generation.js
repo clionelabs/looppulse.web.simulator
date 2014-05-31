@@ -1,26 +1,26 @@
-generateEvents = function(visitor, path, beaconConfig) {
+generateEvents = function(visitor, path, beacon) {
   setTimeout(function() {
-    generateRangeEvents(visitor, path, beaconConfig);
-    generateExitEvent(visitor, path, beaconConfig);
+    generateRangeEvents(visitor, path, beacon);
+    generateExitEvent(visitor, path, beacon);
   }, path.delay);
 }
 
-function generateRangeEvent(visitor, path, beaconConfig) {
-  var event = new RangeEvent(visitor, path, beaconConfig);
+function generateRangeEvent(visitor, path, beacon) {
+  var event = new RangeEvent(visitor, path, beacon);
   event.save();
 }
 
-function generateRangeEvents(visitor, path, beaconConfig) {
+function generateRangeEvents(visitor, path, beacon) {
   _(5).times(function (n) {
     setTimeout(function() {
-      generateRangeEvent(visitor, path, beaconConfig)
+      generateRangeEvent(visitor, path, beacon)
     }, n * 1000);
   });
 }
 
-function generateExitEvent(visitor, path, beaconConfig) {
+function generateExitEvent(visitor, path, beacon) {
   setTimeout(function() {
-    var event = new ExitEvent(visitor, path, beaconConfig);
+    var event = new ExitEvent(visitor, path, beacon);
     event.save();
   }, path.duration);
 }

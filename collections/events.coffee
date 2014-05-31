@@ -7,10 +7,10 @@ dateToString = (date) ->
   return date.toString()
 
 class Event
-  constructor: (visitor, path, beaconConfig) ->
-    @uuid = beaconConfig.uuid;
-    @major = beaconConfig.major;
-    @minor = beaconConfig.minor;
+  constructor: (visitor, path, beacon) ->
+    @uuid = beacon.uuid;
+    @major = beacon.major;
+    @minor = beacon.minor;
     @visitor_uuid = visitor.uuid;
     @created_at = dateToString(new Date())
 
@@ -19,13 +19,13 @@ class Event
 
 
 class RangeEvent extends Event
-  constructor: (visitor, path, beaconConfig) ->
-    super(visitor, path, beaconConfig)
+  constructor: (visitor, path, beacon) ->
+    super(visitor, path, beacon)
     @type = "didRangeBeacons"
 
 class ExitEvent extends Event
-  constructor: (visitor, path, beaconConfig) ->
-    super(visitor, path, beaconConfig)
+  constructor: (visitor, path, beacon) ->
+    super(visitor, path, beacon)
     @type = "didExitRegion"
 
 
