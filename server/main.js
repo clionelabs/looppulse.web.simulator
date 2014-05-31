@@ -37,23 +37,25 @@ function generateRangeEvents(visitor, path, beaconConfig) {
   return events;
 }
 
+function generateExitEvent(visitor, path, beaconConfig) {
+  var delay = path.delay + path.duration;
+  var exitedAt = addMilliseconds(startTime, delay);
+  return {
+    delay: delay,
+    data: {
+      "type": "didExitRegion",
+      "uuid": beaconConfig.uuid,
+      "major": beaconConfig.major,
+      "minor": beaconConfig.minor,
+      "visitor_uuid": visitor.uuid,
+      "created_at": dateToString(exitedAt)
+    }
+  };
+}
+
 function generateEvents(visitor, path, beaconConfig) {
     var events = generateRangeEvents(visitor, path, beaconConfig);
-
-    var delay = path.delay + path.duration;
-    var exitedAt = addMilliseconds(startTime, delay);
-    events.push({
-      delay: delay,
-      data: {
-        "type": "didExitRegion",
-        "uuid": beaconConfig.uuid,
-        "major": beaconConfig.major,
-        "minor": beaconConfig.minor,
-        "visitor_uuid": visitor.uuid,
-        "created_at": dateToString(exitedAt)
-      }
-    });
-
+    events.push(generateExitEvent(visitor, path, beaconConfig));
     return events;
 }
 
