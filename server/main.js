@@ -10,6 +10,8 @@ function dateToString(date) {
   return date.toString();
 }
 
+
+
 function generateRangeEvent(visitor, path, beaconConfig, extra_delay) {
   var extra_delay = extra_delay || 0;
   var delay = path.delay + extra_delay;
@@ -29,6 +31,9 @@ function generateRangeEvent(visitor, path, beaconConfig, extra_delay) {
 }
 
 function generateRangeEvents(visitor, path, beaconConfig) {
+  var event = new RangeEvent(visitor, path, beaconConfig);
+  event.save();
+
   var events = [];
   _(5).times(function (n) {
       var event = generateRangeEvent(visitor, path, beaconConfig, n * 1000);
