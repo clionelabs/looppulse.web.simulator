@@ -1,15 +1,15 @@
 var simulationConfig = Meteor.settings;
 
-_.each(simulationConfig.Visitors, function(visitor, key) {
-    visitor.Paths.forEach(function(path) {
-      var beaconConfig = simulationConfig.Beacons[path.beacon];
-      generateEvents(visitor, path, beaconConfig);
+_.each(simulationConfig.visitors, function(visitor, key) {
+    visitor.encounters.forEach(function(encounter) {
+      var beaconConfig = simulationConfig.beacons[encounter.beacon];
+      generateEvents(visitor, encounter, beaconConfig);
     });
   }
 );
 
-firebase = new Firebase(simulationConfig.Firebase);
-if (simulationConfig.ForceReset) {
+firebase = new Firebase(simulationConfig.firebase);
+if (simulationConfig.forceReset) {
   firebase.remove();
 }
 

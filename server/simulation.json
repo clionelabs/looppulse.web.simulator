@@ -1,31 +1,31 @@
 {
-  "Firebase": "https://looppulse-simulator.firebaseio.com/beacon_events",
-  "ForceReset": true,
+  "firebase": "https://looppulse-simulator.firebaseio.com/beacon_events",
+  "forceReset": true,
 
-  "Beacons": {
-    "BeaconBlue": {
+  "beacons": {
+    "beaconBlue": {
       "uuid": "B9407F30-F5F8-466E-AFF9-25556B57FE6D",
       "major": 28364,
       "minor": 4756
     },
-    "BeaconGreen": {
+    "beaconGreen": {
       "uuid": "B9407F30-F5F8-466E-AFF9-25556B57FE6D",
       "major": 54330,
       "minor": 38700
     }
   },
 
-  "Visitors": {
-    "VisitorOne": {
+  "visitors": {
+    "visitorOne": {
       "uuid": "flkjslkfjldsj",
-      "Paths": [
+      "encounters": [
         {
-          "beacon": "BeaconBlue",
+          "beacon": "beaconBlue",
           "delay": 1000,
           "duration": 6000
         },
         {
-          "beacon": "BeaconGreen",
+          "beacon": "beaconGreen",
           "delay": 40000,
           "duration": 10000
         }
