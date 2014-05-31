@@ -1,17 +1,14 @@
 @Events = new Meteor.Collection(null)
 
-addMilliseconds = (date, ms) ->
-  return new Date(date + ms)
-
 dateToString = (date) ->
   return date.toString()
 
 class Event
   constructor: (visitor, path, beacon) ->
-    @uuid = beacon.uuid;
-    @major = beacon.major;
-    @minor = beacon.minor;
-    @visitor_uuid = visitor.uuid;
+    @uuid = beacon.uuid
+    @major = beacon.major
+    @minor = beacon.minor
+    @visitor_uuid = visitor.uuid
     @created_at = dateToString(new Date())
 
   save: ->
