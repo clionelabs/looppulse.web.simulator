@@ -27,22 +27,22 @@ function generateRangeEvents(visitor, path, beaconConfig) {
 
 function generateExitEvent(visitor, path, beaconConfig) {
   setTimeout(function() {
-      var event = new ExitEvent(visitor, path, beaconConfig);
-      event.save();
+    var event = new ExitEvent(visitor, path, beaconConfig);
+    event.save();
   }, path.duration);
 }
 
 function generateEvents(visitor, path, beaconConfig) {
+  setTimeout(function() {
     generateRangeEvents(visitor, path, beaconConfig);
     generateExitEvent(visitor, path, beaconConfig);
+  }, path.delay);
 }
 
 _.each(simulationConfig.Visitors, function(visitor, key) {
     visitor.Paths.forEach(function(path) {
       var beaconConfig = simulationConfig.Beacons[path.beacon];
-      setTimeout(function() {
-          generateEvents(visitor, path, beaconConfig);
-      }, path.delay);
+      generateEvents(visitor, path, beaconConfig);
     });
   }
 );
