@@ -3,31 +3,56 @@
   "forceReset": true,
 
   "beacons": {
-    "beaconBlue": {
+    "entranceOne": {
       "uuid": "B9407F30-F5F8-466E-AFF9-25556B57FE6D",
-      "major": 28364,
-      "minor": 4756
+      "major": 11111,
+      "minor": 1
     },
-    "beaconGreen": {
+    "entranceTwo": {
       "uuid": "B9407F30-F5F8-466E-AFF9-25556B57FE6D",
-      "major": 54330,
-      "minor": 38700
+      "major": 11111,
+      "minor": 2
+    },
+    "productOne": {
+      "uuid": "B9407F30-F5F8-466E-AFF9-25556B57FE6D",
+      "major": 11111,
+      "minor": 3
+    },
+    "productTwo": {
+      "uuid": "B9407F30-F5F8-466E-AFF9-25556B57FE6D",
+      "major": 11111,
+      "minor": 4
+    },
+    "productThree": {
+      "uuid": "B9407F30-F5F8-466E-AFF9-25556B57FE6D",
+      "major": 11111,
+      "minor": 5
+    },
+    "cashierOne": {
+      "uuid": "B9407F30-F5F8-466E-AFF9-25556B57FE6D",
+      "major": 11111,
+      "minor": 6
+    },
+    "cashierTwo": {
+      "uuid": "B9407F30-F5F8-466E-AFF9-25556B57FE6D",
+      "major": 11111,
+      "minor": 7
     }
   },
 
   "visitors": {
     "visitorOne": {
-      "uuid": "flkjslkfjldsj",
+      "uuid": "D7AD6E44-7A9E-4A76-9227-C16903E549A5",
       "encounters": [
         {
-          "beacon": "beaconBlue",
-          "delay": 1000,
-          "duration": 6000
+          "beacon": "entranceOne",
+          "delayInSeconds": 1,
+          "durationInSeconds": 10
         },
         {
-          "beacon": "beaconGreen",
-          "delay": 40000,
-          "duration": 10000
+          "beacon": "productOne",
+          "delayInSeconds": 15,
+          "durationInSeconds": 20
         }
       ]
     }
