@@ -1,9 +1,12 @@
 var simulationConfig = Meteor.settings;
 
 _.each(simulationConfig.visitors, function(visitor, key) {
-    visitor.encounters.forEach(function(encounter) {
-      var beacon = simulationConfig.beacons[encounter.beacon];
-      generateEvents(visitor, encounter, beacon);
+    visitor.encounters.forEach(function(encounterConfig) {
+      var beacon = simulationConfig.beacons[encounterConfig.beacon];
+      var encounter = new Encounter(visitor,
+                                    beacon,
+                                    encounterConfig.duration);
+      encounter.simulate(encounterConfig.delay);
     });
   }
 );
