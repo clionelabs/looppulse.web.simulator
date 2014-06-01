@@ -5,7 +5,6 @@ class Encounter
     @duration = duration
 
   simulate: (delay) ->
-    console.log "simulate(#{delay})"
     setTimeout((=> @simulateEvents()), delay)
 
   simulateEvents: ->
