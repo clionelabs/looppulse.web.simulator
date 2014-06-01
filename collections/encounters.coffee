@@ -27,4 +27,5 @@ class Encounter
 
     setTimeout((=> simulateOneExitEvent()), @duration)
 
+
 @Encounter = Encounter

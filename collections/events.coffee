@@ -1,8 +1,5 @@
 @Events = new Meteor.Collection(null)
 
-dateToString = (date) ->
-  return date.toString()
-
 class Event
   constructor: (visitor, beacon) ->
     @uuid = beacon.uuid
@@ -20,10 +17,15 @@ class RangeEvent extends Event
     super(visitor, beacon)
     @type = "didRangeBeacons"
 
+
 class ExitEvent extends Event
   constructor: (visitor, beacon) ->
     super(visitor, beacon)
     @type = "didExitRegion"
+
+
+dateToString = (date) ->
+  return date.toString()
 
 @RangeEvent = RangeEvent
 @ExitEvent = ExitEvent
