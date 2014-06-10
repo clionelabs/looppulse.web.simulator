@@ -1,4 +1,11 @@
 var simulationConfig = Meteor.settings;
+var fbPath = simulationConfig.firebase.root + simulationConfig.firebase.path;
+firebase = new Firebase(fbPath);
+if (simulationConfig.forceReset) {
+  firebase.remove();
+  console.log("Reseted data on: " + fbPath);
+}
+console.log("Writing simulated events to: " + fbPath);
 
 _.each(simulationConfig.visitors, function(visitor, key) {
     visitor.encounters.forEach(function(encounterConfig) {
@@ -11,14 +18,19 @@ _.each(simulationConfig.visitors, function(visitor, key) {
     });
   }
 );
+console.log("Scheduled all encounters.");
 
-firebase = new Firebase(simulationConfig.firebase);
-if (simulationConfig.forceReset) {
-  firebase.remove();
-}
 
 Events.find().observe({
   'added': function(doc) {
-    firebase.push(doc);
+    firebase.push(doc,
+      function(error) {
+        if (error) {
+          console.log("Error ()" + JSON.stringify(error) + ") while simulating event: " + JSON.stringify(doc));
+        } else {
+          console.log("Succeed simulating event: " + JSON.stringify(doc));
+        }
+      }
+    );
   }
 });
