@@ -1,8 +1,9 @@
 class Encounter
-  constructor: (visitor, beacon, duration) ->
+  constructor: (visitor, beacon, duration, rangeTillExit) ->
     @visitor = visitor
     @beacon = beacon
     @duration = duration
+    @rangeTillExit = rangeTillExit
 
   simulate: (delay) ->
     setTimeout((=> @simulateEvents()), delay)
@@ -16,7 +17,12 @@ class Encounter
       event = new RangeEvent(@visitor, @beacon)
       event.save()
 
-    _(5).times(
+    # Determine the duration for the range events
+    rangeDurationInSeconds = 5;
+    if (@rangeTillExit)
+      rangeDurationInSeconds = (@duration - 1000)/1000;
+
+    _(rangeDurationInSeconds).times(
       (n) -> setTimeout((=> simulateOneRangeEvent()), n * 1000)
     )
 

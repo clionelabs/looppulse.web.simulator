@@ -13,7 +13,7 @@ _.each(simulationConfig.visitors, function(visitor, key) {
       var duration = encounterConfig.durationInSeconds * 1000;
       var delay = encounterConfig.delayInSeconds * 1000;
 
-      var encounter = new Encounter(visitor, beacon, duration);
+      var encounter = new Encounter(visitor, beacon, duration, simulationConfig.rangeTillExit);
       encounter.simulate(delay);
     });
   }

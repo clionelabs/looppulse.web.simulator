@@ -3,7 +3,8 @@
     "root": "https://looppulse-dev-thomas.firebaseio.com/",
     "path": "/beacon_events"
   },
-  "forceReset": false,
+  "forceReset": true,
+  "rangeTillExit": true,
 
   "beacons": {
     "entranceOne": {
