@@ -1,11 +1,14 @@
 var simulationConfig = Meteor.settings;
 var fbPath = simulationConfig.firebase.root + simulationConfig.firebase.path;
 firebase = new Firebase(fbPath);
-if (simulationConfig.forceReset) {
+if (simulationConfig.removeOldData) {
   firebase.remove();
-  console.log("[Sim] Reseted data on: " + fbPath);
+  console.log("[Sim] Removed old data on: " + fbPath);
 }
 console.log("[Sim] Writing simulated events to: " + fbPath);
+if (simulationConfig.loopingIntervalInSeconds) {
+    console.log("[Sim] Looping every " + simulationConfig.loopingIntervalInSeconds + " seconds.");
+}
 
 var main = function(){
   console.log("[Sim] Cycle Begin.");
@@ -37,8 +40,8 @@ Events.find().observe({
   }
 });
 
-if (simulationConfig.looping) {
-  setInterval(main, simulationConfig.loopingInterval) // in ms
+if (simulationConfig.loopingIntervalInSeconds) {
+  setInterval(main, simulationConfig.loopingIntervalInSeconds * 1000); // in ms
 }
 
 

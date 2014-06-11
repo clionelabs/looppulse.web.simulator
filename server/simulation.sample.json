@@ -3,10 +3,10 @@
     "root": "https://looppulse-dev-thomas.firebaseio.com/",
     "path": "/beacon_events"
   },
-  "forceReset": true,
+  "removeOldData": true,
   "rangeTillExit": true,
-  "looping": true,
-  "loopingInterval": 180000,
+  "loopingIntervalInSeconds": 0,
+
   "beacons": {
     "entranceOne": {
       "uuid": "74278BDA-B644-4520-8F0C-720EAF059935",
