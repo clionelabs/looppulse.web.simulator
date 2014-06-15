@@ -19,8 +19,9 @@ class Encounter
 
     # Determine the duration for the range events
     rangeDurationInSeconds = 5;
-    if (@rangeTillExit)
-      rangeDurationInSeconds = (@duration - 1000)/1000;
+    if (@rangeTillExit || @duration < rangeDurationInSeconds * 1000)
+      rangeDurationInSeconds = (@duration - 1000)/1000
+      rangeDurationInSeconds = 0 if rangeDurationInSeconds < 0
 
     _(rangeDurationInSeconds).times(
       (n) -> setTimeout((=> simulateOneRangeEvent()), n * 1000)
