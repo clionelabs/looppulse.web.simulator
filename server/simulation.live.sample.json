@@ -41,6 +41,13 @@
 
   "liveMode": {
     "maxVisitorsInLocation": 5,
-    "maxSecondsPerBeacon": 5
+    "secondsPerBeacon": {
+      "min": 5,
+      "max": 10
+    },
+    "secondsBetweenBeacons": {
+      "min": 5,
+      "max": 10
+    }
   }
 }

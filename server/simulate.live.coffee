@@ -1,11 +1,13 @@
 @simulateLiveMode = (config) ->
   liveMode = config.liveMode
-  console.log("Starting LIVE mode with maxVisitorsInLocation: #{liveMode.maxVisitorsInLocation}")
+  console.log("Starting LIVE mode with #{JSON.stringify(liveMode)}")
 
   beacons = readBeacons(config)
 
   #  Create first visitor
-  visitor = new Visitor(beacons, liveMode.maxSecondsPerBeacon)
+  visitor = new Visitor(beacons,
+                        liveMode.secondsPerBeacon,
+                        liveMode.secondsBetweenBeacons)
   visitor.enter()
 
   # spawn = () ->

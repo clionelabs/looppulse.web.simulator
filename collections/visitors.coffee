@@ -1,11 +1,12 @@
 @Visitors = new Meteor.Collection(null)
 
 class Visitor
-  constructor: (beacons, maxSecondsPerBeacon) ->
+  constructor: (beacons, secondsPerBeacon, secondsBetweenBeacons) ->
     @entrances = beacons.entrances
     @products = beacons.products
     @cashiers = beacons.cashiers
-    @maxSecondsPerBeacon = maxSecondsPerBeacon
+    @secondsPerBeacon = secondsPerBeacon
+    @secondsBetweenBeacons = secondsBetweenBeacons
     @uuid = Random.uuid()
 
   save: () ->
@@ -39,13 +40,19 @@ class Visitor
     # just let Encounter to read it from the global setting file.
     rangeTillExit = Meteor.settings.rangeTillExit
 
-    duration = 1000 * Random.seconds(1+@maxSecondsPerBeacon/10, @maxSecondsPerBeacon)
+    duration = 1000 * Random.seconds(@secondsPerBeacon.min,
+                                     @secondsPerBeacon.max)
     encounter = new Encounter(this, beacon, duration, rangeTillExit)
     encounter.simulate()
-    setTimeout((=> @nextMove()), duration)
+
+    # Since we don't have teleporter yet, there should be a delay between beacons.
+    travelTime = 1000 * Random.seconds(@secondsBetweenBeacons.min,
+                                       @secondsBetweenBeacons.max)
+    setTimeout((=> @nextMove()), duration + travelTime)
     @save()
 
-    console.log("#{@uuid} #{@state} for #{duration/1000} seconds at #{beacon.major}")
+    console.log("[Sim] Visitor[#{@uuid}] #{@state} for #{duration/1000} seconds at #{beacon.uuid}, #{beacon.major}, #{beacon.minor}")
+    console.log("[Sim] Visitor[#{@uuid}] will take #{travelTime/1000} seconds to move to next destination")
 
   nextMove: () =>
     possible = @possibleNextMoves()
