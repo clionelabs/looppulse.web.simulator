@@ -5,7 +5,7 @@ class Encounter
     @duration = duration
     @rangeTillExit = rangeTillExit
 
-  simulate: (delay) ->
+  simulate: (delay=0) ->
     setTimeout((=> @simulateEvents()), delay)
 
   simulateEvents: ->
