@@ -10,7 +10,8 @@ class Visitor
     @uuid = Random.uuid()
 
   save: () ->
-    Visitors.upsert(this, this)
+    Visitors.upsert({uuid: @uuid}, {uuid: @uuid})
+    @_id = Visitors.findOne({uuid:@uuid})._id
 
   enter: () =>
     @state = "entered"
@@ -51,8 +52,8 @@ class Visitor
     setTimeout((=> @nextMove()), duration + travelTime)
     @save()
 
-    console.log("[Sim] Visitor[#{@uuid}] #{@state} for #{duration/1000} seconds at #{beacon.uuid}, #{beacon.major}, #{beacon.minor}")
-    console.log("[Sim] Visitor[#{@uuid}] will take #{travelTime/1000} seconds to move to next destination")
+    console.log("[Sim] Visitor[uuid:#{@uuid}, _id:#{@_id}] #{@state} for #{duration/1000} seconds at #{beacon.uuid}, #{beacon.major}, #{beacon.minor}")
+    # console.log("[Sim] Visitor[uuid:#{@uuid}, _id:#{@_id}] will take #{travelTime/1000} seconds to move to next destination")
 
   nextMove: () =>
     possible = @possibleNextMoves()

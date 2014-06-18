@@ -4,24 +4,20 @@
 
   beacons = readBeacons(config)
 
-  #  Create first visitor
-  visitor = new Visitor(beacons,
-                        liveMode.secondsPerBeacon,
-                        liveMode.secondsBetweenBeacons)
-  visitor.enter()
+  spawn = () ->
+    if Visitors.find().count() < liveMode.maxVisitorsInLocation
+      visitor = new Visitor(beacons,
+                            liveMode.secondsPerBeacon,
+                            liveMode.secondsBetweenBeacons)
+      visitor.enter()
 
-  # spawn = () ->
-  #   console.log("Current visitors: #{Visitors.find().count()}")
-  #   if Visitors.find().count() < liveMode.maxVisitorsInLocation
-  #     vistior = new Visitor(beacons, liveMode.maxSecondsPerBeacon)
-  #     visitor.enter()
-  #
-  # Visitors.find().observe(
-  #   'added': (doc) -> spawn()
-  #   "removed": (oldDoc) ->
-  #     console.log("Visitor exited and removed: #{JSON.stringify(oldDoc)}")
-  #     spawn()
-  # )
+  # Create initial group of simulated visitors
+  _(liveMode.maxVisitorsInLocation).times (n) -> spawn()
+
+  # Re spawn when needed
+  Visitors.find().observe(
+    "removed": (oldDoc) -> spawn()
+  )
 
 # returns array of entrances, products and cashiers beacon
 readBeacons = (config) ->
