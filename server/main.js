@@ -6,26 +6,6 @@ if (simulationConfig.removeOldData) {
   console.log("[Sim] Removed old data on: " + fbPath);
 }
 console.log("[Sim] Writing simulated events to: " + fbPath);
-if (simulationConfig.loopingIntervalInSeconds) {
-    console.log("[Sim] Looping every " + simulationConfig.loopingIntervalInSeconds + " seconds.");
-}
-
-var main = function(){
-  console.log("[Sim] Cycle Begin.");
-  _.each(simulationConfig.visitors, function(visitor, key) {
-      visitor.encounters.forEach(function(encounterConfig) {
-        var beacon = simulationConfig.beacons[encounterConfig.beacon];
-        var duration = encounterConfig.durationInSeconds * 1000;
-        var delay = encounterConfig.delayInSeconds * 1000;
-
-        var encounter = new Encounter(visitor, beacon, duration, simulationConfig.rangeTillExit);
-        encounter.simulate(delay);
-      });
-    }
-  );
-  console.log("[Sim] Scheduled all encounters.");
-}
-
 Events.find().observe({
   'added': function(doc) {
     firebase.push(doc,
@@ -33,16 +13,15 @@ Events.find().observe({
         if (error) {
           console.log("[Firebase] Error: " + error + ",\n while simulating event: " + doc);
         } else {
-          console.log("[Firebase] OK: ", doc._id, doc.created_at, doc.uuid);
+          console.log("[Firebase] OK: ", doc._id, doc.type, doc.created_at, doc.uuid, doc.major);
         }
       }
     );
   }
 });
 
-if (simulationConfig.loopingIntervalInSeconds) {
-  setInterval(main, simulationConfig.loopingIntervalInSeconds * 1000); // in ms
+if (simulationConfig.liveMode) {
+  simulateLiveMode(simulationConfig);
+} else {
+  simulate(simulationConfig);
 }
-
-
-main();
