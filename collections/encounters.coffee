@@ -5,7 +5,9 @@ class Encounter
     @duration = duration
     @rangeTillExit = rangeTillExit
 
-  simulate: (delay=0) ->
+  simulate: (delay=100) ->
+    console.log("[Encounter] Delay in simulation", delay)
+    console.warn("[Encounter] Delay is too small! Please check your program ") if(delay <= 0)
     setTimeout((=> @simulateEvents()), delay)
 
   simulateEvents: ->
