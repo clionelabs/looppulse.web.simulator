@@ -40,12 +40,10 @@ class Visitor
     # We could pass in rangeTillExit in the constructor but maybe we should
     # just let Encounter to read it from the global setting file.
     rangeTillExit = Meteor.settings.rangeTillExit
-    delay = Meteor.settings.loopingIntervalInSeconds
-
     duration = 1000 * Random.seconds(@secondsPerBeacon.min,
                                      @secondsPerBeacon.max)
     encounter = new Encounter(this, beacon, duration, rangeTillExit)
-    encounter.simulate(delay)
+    encounter.simulate()
 
     # Since we don't have teleporter yet, there should be a delay between beacons.
     travelTime = 1000 * Random.seconds(@secondsBetweenBeacons.min,
@@ -53,12 +51,7 @@ class Visitor
     interval = duration + travelTime
     setTimeout((=> @nextMove()), interval)
     @save()
-    console.log("[Visitor] Visitor Scheduled")
-
-    console.log("\t uuid:#{@uuid}\n\t_id:#{@_id}")
-    console.log("\t #{@state} for #{duration/1000} seconds \n\tat #{beacon.uuid}, #{beacon.major}, #{beacon.minor}")
-    console.log("\t delay: #{delay}, interval: #{interval}")
-    # console.log("[Sim] Visitor[uuid:#{@uuid}, _id:#{@_id}] will take #{travelTime/1000} seconds to move to next destination")
+    console.info("[Sim] Visitor[uuid:#{@uuid}] #{@state} for #{duration/1000} seconds at #{beacon.uuid}, #{beacon.major}, #{beacon.minor}.")
 
   nextMove: () =>
     possible = @possibleNextMoves()

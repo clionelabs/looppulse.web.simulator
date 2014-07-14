@@ -15,16 +15,11 @@ Events.find().observe({
       function(error) {
         if (error) {
           console.log("[Firebase] Error: " + error + ",\n while simulating event: " + doc);
-        } else {
-          console.log("[Firebase] OK: ", doc._id, doc.type, doc.created_at, doc.uuid, doc.major);
         }
       }
     );
   }
 });
-
-//Config check
-if(simulationConfig.loopingIntervalInSeconds <= 0){ console.warn("[Sim] Delay between Encounters is too small! \n Please check `Meteor.settings.loopingIntervalInSeconds`") }
 
 //Setup mode
 if (simulationConfig.liveMode) {
