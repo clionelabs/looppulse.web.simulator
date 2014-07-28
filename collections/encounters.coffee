@@ -10,8 +10,13 @@ class Encounter
     setTimeout((=> @simulateEvents()), delay)
 
   simulateEvents: ->
+    @simulateEnterEvent()
     @simulateRangeEvents()
     @simulateExitEvent()
+
+  simulateEnterEvent: ->
+    event = new EnterEvent(@visitor, @beacon)
+    event.save()
 
   simulateRangeEvents: ->
     simulateOneRangeEvent = =>

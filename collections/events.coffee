@@ -12,6 +12,12 @@ class Event
     Events.upsert(this, this)
 
 
+class EnterEvent extends Event
+  constructor: (visitor, beacon) ->
+    super(visitor, beacon)
+    @type = "didEnterRegion"
+
+
 class RangeEvent extends Event
   constructor: (visitor, beacon) ->
     super(visitor, beacon)
@@ -27,5 +33,6 @@ class ExitEvent extends Event
 dateToString = (date) ->
   return date.toString()
 
+@EnterEvent = EnterEvent
 @RangeEvent = RangeEvent
 @ExitEvent = ExitEvent
