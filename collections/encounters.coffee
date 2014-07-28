@@ -23,15 +23,23 @@ class Encounter
       event = new RangeEvent(@visitor, @beacon)
       event.save()
 
-    # Determine the duration for the range events
-    rangeDurationInSeconds = 5;
-    if (@rangeTillExit || @duration < rangeDurationInSeconds * 1000)
-      rangeDurationInSeconds = (@duration - 1000)/1000
-      rangeDurationInSeconds = 0 if rangeDurationInSeconds < 0
+    simulateAllRangeEvents = =>
+      # background processing allowed by iOS after iBeacon detection
+      allowableRangingDurationInSeconds = 5
+      # first second is didEnterEvent
+      rangeDurationInSeconds = allowableRangingDurationInSeconds - 1
+      if (@rangeTillExit || @duration < rangeDurationInSeconds * 1000)
+        # -1 second for exit event
+        rangeDurationInSeconds = (@duration - 1000)/1000
+        rangeDurationInSeconds = 0 if rangeDurationInSeconds < 0
 
-    _(rangeDurationInSeconds).times(
-      (n) -> setTimeout((=> simulateOneRangeEvent()), n * 1000)
-    )
+      _(rangeDurationInSeconds).times(
+        (n) -> setTimeout((=> simulateOneRangeEvent()), n * 1000)
+      )
+
+    # Delay all didRangeRegion events by 1 seconds as the first event
+    # should be didEnterEvent
+    setTimeout((=> simulateAllRangeEvents()), 1000)
 
   simulateExitEvent: ->
     simulateOneExitEvent = =>
