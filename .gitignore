@@ -1,5 +1,7 @@
 .DS_Store
 
+/mup.json
+/settings.json
 /server/simulation.json
 
 /server/simulation.live.json
