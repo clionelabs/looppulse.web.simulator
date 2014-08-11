@@ -23,9 +23,15 @@ Events.find().observe({
 
 //Setup mode
 if (simulationConfig.liveMode) {
-  console.info("[Sim] Using Live Mode")
+  console.info("[Sim] Using Live Mode");
   simulateLiveMode(simulationConfig);
 } else {
-  console.info("[Sim] Using Normal Mode")
+  console.info("[Sim] Using Normal Mode");
   simulate(simulationConfig);
+}
+
+var engagementEventsConfig = simulationConfig.engagementEvents;
+
+if (engagementEventsConfig) {
+  simulateEngagementEvents(engagementEventsConfig);
 }

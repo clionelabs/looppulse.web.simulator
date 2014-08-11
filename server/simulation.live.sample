@@ -39,6 +39,17 @@
     }
   },
 
+  "engagementEvents": {
+    "firebaseURL": {
+      "deliveringMessages": "https://<YOUR_APP>.firebaseio.com/delivering_messages",
+      "engagementEvents": "https://<YOUR_APP>.firebaseio.com/engagement_events"
+    },
+    "secondsBeforeViewed": {
+      "min": 10,
+      "max": 30
+    }
+  },
+
   "liveMode": {
     "maxVisitorsInLocation": 5,
     "secondsPerBeacon": {

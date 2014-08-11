@@ -39,6 +39,17 @@
     }
   },
 
+  "engagementEvents": {
+    "firebaseURL": {
+      "deliveringMessages": "https://<YOUR_APP>.firebaseio.com/delivering_messages",
+      "engagementEvents": "https://<YOUR_APP>.firebaseio.com/engagement_events"
+    },
+    "secondsBeforeViewed": {
+      "min": 10,
+      "max": 30
+    }
+  },
+
   "visitors": {
     "visitorOne": {
       "uuid": "D7AD6E44-7A9E-4A76-9227-C16903E549A5",
