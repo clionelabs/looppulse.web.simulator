@@ -13,7 +13,7 @@ logViewedEvent = (message, firebaseURL) ->
 @simulateEngagementEvents = (config) ->
   messagesRef = new Firebase(config.firebaseURL.deliveringMessages)
   messagesRef.on 'child_added', (childSnapshot, prevChildName) ->
-    delayMilliseconds = Random.seconds(config.secondsBeforeViewed.min, config.secondsBeforeViewed.max)
+    delayMilliseconds = 1000 * Random.seconds(config.secondsBeforeViewed.min, config.secondsBeforeViewed.max)
     setTimeout ->
       message = childSnapshot.val()
       logViewedEvent(message, config.firebaseURL.engagementEvents)
