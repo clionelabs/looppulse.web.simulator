@@ -13,9 +13,16 @@ logViewedEvent = (message, firebaseURL) ->
 @simulateEngagementEvents = (config) ->
   messagesRef = new Firebase(config.firebaseURL.deliveringMessages)
   messagesRef.on 'child_added', (childSnapshot, prevChildName) ->
+    message = childSnapshot.val()
+
+    if config.lostMessageRatio and Random.trueInRatio(config.lostMessageRatio)
+      console.log("[Sim] Message[%s] lost", message._id)
+      childSnapshot.ref().remove()
+      return
+
     delayMilliseconds = 1000 * Random.seconds(config.secondsBeforeViewed.min, config.secondsBeforeViewed.max)
     setTimeout ->
-      message = childSnapshot.val()
       logViewedEvent(message, config.firebaseURL.engagementEvents)
       childSnapshot.ref().remove()
+      console.log("[Sim] Message[%s] has been read", message._id)
     , delayMilliseconds

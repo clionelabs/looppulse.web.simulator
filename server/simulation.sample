@@ -44,6 +44,7 @@
       "deliveringMessages": "https://<YOUR_APP>.firebaseio.com/delivering_messages",
       "engagementEvents": "https://<YOUR_APP>.firebaseio.com/engagement_events"
     },
+    "lostMessageRatio": 0.25,
     "secondsBeforeViewed": {
       "min": 10,
       "max": 30

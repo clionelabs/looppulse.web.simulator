@@ -12,4 +12,8 @@ class Random
     # console.log("picked (#{index}) #{choices[index]} from #{choices}")
     choices[index]
 
+  @trueInRatio: (ratio) ->
+    # 0 <= ratio <= 1
+    return Math.random() <= ratio
+
 @Random = Random
