@@ -23,6 +23,10 @@ class RangeEvent extends Event
     super(visitor, beacon)
     @type = "didRangeBeacons"
 
+    @accuracy = Random.pickOne([2.617100534911419, 0.5, 3, 70])
+    @proximity = Random.pickOne(["unknown", "far", "near", "intermediate"])
+    @rssi = Random.pickOne([-98, -1, 1])
+
 
 class ExitEvent extends Event
   constructor: (visitor, beacon) ->
