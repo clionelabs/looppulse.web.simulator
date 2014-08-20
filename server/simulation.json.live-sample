@@ -1,6 +1,6 @@
 {
   "firebase": {
-    "root": "https://looppulse-dev-thomas.firebaseio.com/",
+    "root": "https://<YOUR_APP>.firebaseio.com/",
     "path": "/beacon_events"
   },
   "removeOldData": true,
