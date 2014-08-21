@@ -1,23 +1,35 @@
-@simulateLiveMode = (config) ->
-  liveMode = config.liveMode
-  console.log("Starting LIVE mode with #{JSON.stringify(liveMode)}")
+class LiveSimulator
+  constructor: (config) ->
+    @config = config
+    @beacons = readBeacons(config)
 
-  beacons = readBeacons(config)
+    liveMode = config.liveMode
+    @maxVisitorsInLocation = liveMode.maxVisitorsInLocation
+    @secondsPerBeacon = liveMode.secondsPerBeacon
+    @secondsBetweenBeacons = liveMode.secondsBetweenBeacons
 
-  spawn = () ->
-    if Visitors.find().count() < liveMode.maxVisitorsInLocation
-      visitor = new Visitor(beacons,
-                            liveMode.secondsPerBeacon,
-                            liveMode.secondsBetweenBeacons)
+  spawn: ->
+    if Visitors.find().count() < @maxVisitorsInLocation
+      visitor = new Visitor(@beacons, @secondsPerBeacon, @secondsBetweenBeacons)
       visitor.enter()
 
-  # Create initial group of simulated visitors
-  _(liveMode.maxVisitorsInLocation).times (n) -> spawn()
+  run: ->
+    console.log("Starting LIVE mode with #{JSON.stringify(@config.liveMode)}")
 
-  # Re spawn when needed
-  Visitors.find().observe(
-    "removed": (oldDoc) -> spawn()
-  )
+    # Create initial group of simulated visitors
+    _(@maxVisitorsInLocation).times (n) =>
+      @spawn()
+
+    # Re spawn when needed
+    Visitors.find().observe
+      "removed": (oldDoc) =>
+        @spawn()
+
+
+@simulateLiveMode = (config) ->
+  simulator = new LiveSimulator config
+  simulator.run()
+
 
 # returns array of entrances, products and cashiers beacon
 readBeacons = (config) ->
