@@ -10,6 +10,14 @@ logViewedEvent = (message, firebaseURL) ->
   }
   engagementEventsRef.push(data)
 
+
+engagementEventsFirebaseURL = (companyId) ->
+  if companyId
+    return "#{Meteor.settings.firebase.root}/companies/#{companyId}/engagement_events"
+  else
+    return "#{Meteor.settings.firebase.root}/engagement_events"
+
+
 @simulateEngagementEvents = (config) ->
   messagesRef = new Firebase(config.firebaseURL.deliveringMessages)
   messagesRef.on 'child_added', (childSnapshot, prevChildName) ->
@@ -22,7 +30,7 @@ logViewedEvent = (message, firebaseURL) ->
 
     delayMilliseconds = 1000 * Random.seconds(config.secondsBeforeViewed.min, config.secondsBeforeViewed.max)
     setTimeout ->
-      logViewedEvent(message, config.firebaseURL.engagementEvents)
+      logViewedEvent(message, engagementEventsFirebaseURL(Meteor.settings.companyId))
       childSnapshot.ref().remove()
       console.log("[Sim] Message[%s] has been read", message._id)
     , delayMilliseconds
