@@ -1,6 +1,11 @@
 // Main program
 var simulationConfig = Meteor.settings;
 var fbPath = simulationConfig.firebase.root + simulationConfig.firebase.path;
+if (simulationConfig.companyId) {
+  fbPath = simulationConfig.firebase.root + "/companies/" + simulationConfig.companyId + simulationConfig.firebase.path;
+} else {
+  console.warn("[Sim] Config does not set companyId");
+}
 firebase = new Firebase(fbPath);
 if (simulationConfig.removeOldData) {
   firebase.remove();
