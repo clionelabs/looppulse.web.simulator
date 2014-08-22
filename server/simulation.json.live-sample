@@ -1,7 +1,8 @@
 {
   "firebase": {
     "root": "https://<YOUR_APP>.firebaseio.com/",
-    "path": "/beacon_events"
+    "path": "/beacon_events",
+    "config": "https://looppulse-config.firebaseio.com/"
   },
   "removeOldData": true,
   "rangeTillExit": true,
