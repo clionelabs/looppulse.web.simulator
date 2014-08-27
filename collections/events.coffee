@@ -27,6 +27,10 @@ class RangeEvent extends Event
     @proximity = Random.pickOne(["unknown", "far", "near", "intermediate"])
     @rssi = Random.pickOne([-98, -1, 1])
 
+    if (!Meteor.settings.liveMode)
+      @accuracy = 0.5
+      @proximity = "intermediate"
+      @rssi = 1
 
 class ExitEvent extends Event
   constructor: (visitor, beacon) ->
