@@ -3,9 +3,7 @@ logViewedEvent = (message, firebaseURL) ->
   createdAt = new Date();
   data = {
     created_at: createdAt.toISOString()
-    engagement_id: message.engagementId
     type: "didReceiveRemoteNotification"
-    visitor_uuid: message.visitorId,
     message_id: message._id
   }
   engagementEventsRef.push(data)
