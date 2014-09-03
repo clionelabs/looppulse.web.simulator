@@ -42,8 +42,10 @@ class Visitor
     rangeTillExit = Meteor.settings.rangeTillExit
     duration = 1000 * Random.seconds(@secondsPerBeacon.min,
                                      @secondsPerBeacon.max)
-    encounter = new Encounter(this, beacon, duration, rangeTillExit)
-    encounter.simulate()
+
+    if beacon
+      encounter = new Encounter(this, beacon, duration, rangeTillExit)
+      encounter.simulate()
 
     # Since we don't have teleporter yet, there should be a delay between beacons.
     travelTime = 1000 * Random.seconds(@secondsBetweenBeacons.min,
@@ -51,7 +53,9 @@ class Visitor
     interval = duration + travelTime
     setTimeout((=> @nextMove()), interval)
     @save()
-    console.info("[Sim] Visitor[uuid:#{@uuid}] #{@state} for #{duration/1000} seconds at #{beacon.uuid}, #{beacon.major}, #{beacon.minor}.")
+
+    if beacon
+      console.info("[Sim] Visitor[uuid:#{@uuid}] #{@state} for #{duration/1000} seconds at #{beacon.uuid}, #{beacon.major}, #{beacon.minor}.")
 
   nextMove: () =>
     possible = @possibleNextMoves()
