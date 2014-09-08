@@ -1,10 +1,17 @@
 // Main program
 var simulationConfig = Meteor.settings;
 var fbPath = simulationConfig.firebase.root + simulationConfig.firebase.path;
-if (simulationConfig.companyId) {
-  fbPath = simulationConfig.firebase.root + "/companies/" + simulationConfig.companyId + simulationConfig.firebase.path;
+if (simulationConfig.application) {
+  var authUrl = simulationConfig.application.authURL;
+  var result = HTTP.get(authUrl, {
+    headers: {
+      "x-auth-token": simulationConfig.application.token
+    }
+  });
+  console.log("Authenticated with", JSON.stringify(result));
+  fbPath = result.data.system.firebase.beacon_events;
 } else {
-  console.warn("[Sim] Config does not set companyId");
+  console.warn("[Sim] Config does not set application");
 }
 firebase = new Firebase(fbPath);
 if (simulationConfig.removeOldData) {

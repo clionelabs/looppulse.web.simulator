@@ -8,7 +8,10 @@
   "rangeTillExit": true,
   "loopingIntervalInSeconds": 0,
 
-  "companyId": "",
+  "application": {
+    "authURL": "",
+    "token": ""
+  },
 
   "beacons": {
     "entranceOne": {
