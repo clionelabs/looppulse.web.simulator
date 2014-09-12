@@ -6,6 +6,8 @@
 standard-app-packages
 autopublish
 insecure
-Firebase
 coffeescript
 http
+mrt:firebase
+underscore
+
