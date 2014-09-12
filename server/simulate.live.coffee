@@ -10,6 +10,7 @@ class LiveSimulator
     @secondsBetweenBeacons = liveMode.secondsBetweenBeacons
 
     if Meteor.settings.firebase.config
+      console.warn "Loading beacons from config file while observing Firebase:", @beacons if config.beacons?
       firebaseURL = Meteor.settings.firebase.config + "/companies"
       @observeBeaconsFromFirebase(firebaseURL)
 
