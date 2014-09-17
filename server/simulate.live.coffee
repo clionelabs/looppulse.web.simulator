@@ -32,7 +32,7 @@ class LiveSimulator
               major: beaconConfig.major
               minor: beaconConfig.minor
             }
-            console.info("[LiveSimulator] Adding beacon from Firebase", JSON.stringify(beacon))
+            console.info("[LiveSimulator] Adding beacon from Firebase", JSON.stringify(beacon), type)
             switch type
               when "product"
                 @beacons.products.push(beacon)

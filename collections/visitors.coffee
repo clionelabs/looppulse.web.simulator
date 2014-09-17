@@ -10,7 +10,10 @@ class Visitor
     @uuid = Random.uuid()
 
   save: () ->
-    Visitors.upsert({uuid: @uuid}, {uuid: @uuid})
+    Visitors.upsert({uuid: @uuid}, {
+      uuid: @uuid
+      state: @state
+    })
     @_id = Visitors.findOne({uuid:@uuid})._id
 
   enter: () =>
@@ -30,6 +33,11 @@ class Visitor
 
   exit: () =>
     @state = "exited"
+    beacon = Random.pickOne(@entrances)
+    @stay(beacon)
+
+  revisited: () =>
+    @state = "revisited"
     beacon = Random.pickOne(@entrances)
     @stay(beacon)
 
@@ -71,7 +79,9 @@ class Visitor
       when "purchased"
         [@browse, @exit]
       when "exited"
-        [@remove]
+        [@revisited, @remove]
+      when "revisited"
+        [@browse, @exit]
 
 
 @Visitor = Visitor
