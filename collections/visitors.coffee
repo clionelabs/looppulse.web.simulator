@@ -1,12 +1,13 @@
 @Visitors = new Meteor.Collection(null)
 
 class Visitor
-  constructor: (beacons, secondsPerBeacon, secondsBetweenBeacons) ->
+  constructor: (beacons, secondsPerBeacon, secondsBetweenBeacons, strategies) ->
     @entrances = beacons.entrances
     @products = beacons.products
     @cashiers = beacons.cashiers
     @secondsPerBeacon = secondsPerBeacon
     @secondsBetweenBeacons = secondsBetweenBeacons
+    @browseStrategy = strategies.browseStrategy
     @uuid = Random.uuid()
 
   save: () ->
@@ -23,7 +24,7 @@ class Visitor
 
   browse: () =>
     @state = "browsed"
-    beacon = Random.pickOne(@products)
+    beacon = @browseStrategy()
     @stay(beacon)
 
   purchase: () =>

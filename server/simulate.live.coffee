@@ -6,8 +6,7 @@ class LiveSimulator
 
     liveMode = config.liveMode
     @maxVisitorsInLocation = liveMode.maxVisitorsInLocation
-    @secondsPerBeacon = liveMode.secondsPerBeacon
-    @secondsBetweenBeacons = liveMode.secondsBetweenBeacons
+    @visitorFactory = new VisitorFactory(liveMode.visitorTypes, @beacons, liveMode.secondsPerBeacon, liveMode.secondsBetweenBeacons)
 
     if Meteor.settings.firebase.config
       console.warn "Loading beacons from config file while observing Firebase:", @beacons if config.beacons?
@@ -45,7 +44,7 @@ class LiveSimulator
 
   spawn: ->
     if Visitors.find().count() < @maxVisitorsInLocation
-      visitor = new Visitor(@beacons, @secondsPerBeacon, @secondsBetweenBeacons)
+      visitor = @visitorFactory.generate()
       visitor.enter()
 
   run: ->
