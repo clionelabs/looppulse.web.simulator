@@ -1,17 +1,15 @@
-class LiveSimulator
+class ContinuousLiveSimulator
   constructor: (config) ->
     @config = config
-    # TODO model beacons as collection?
-    @beacons = readBeacons(config)
+    @beacons = {entrances: [], products: [], cashiers: []}
+    @productBeaconMap = {}
 
-    liveMode = config.liveMode
-    @maxVisitorsInLocation = liveMode.maxVisitorsInLocation
-    @visitorFactory = new VisitorFactory(liveMode.visitorTypes, @beacons, liveMode.secondsPerBeacon, liveMode.secondsBetweenBeacons)
+    behaviour = config.behaviour
+    @maxVisitorsInLocation = behaviour.maxVisitorsInLocation
+    @visitorFactory = new VisitorFactory(behaviour.visitorTypes, @beacons, behaviour.secondsPerBeacon, behaviour.secondsBetweenBeacons, @productBeaconMap)
 
-    if Meteor.settings.firebase.config
-      console.warn "Loading beacons from config file while observing Firebase:", @beacons if config.beacons?
-      firebaseURL = Meteor.settings.firebase.config + "/companies"
-      @observeBeaconsFromFirebase(firebaseURL)
+    firebaseURL = Meteor.settings.firebase.config + "/companies"
+    @observeBeaconsFromFirebase(firebaseURL)
 
   observeBeaconsFromFirebase: (firebaseURL) ->
     console.info("[LiveSimulator] Observing beacons from Firebase", firebaseURL)
@@ -35,6 +33,7 @@ class LiveSimulator
             switch type
               when "product"
                 @beacons.products.push(beacon)
+                @productBeaconMap[installationConfig.product] = beacon
               when "entrance"
                 @beacons.entrances.push(beacon)
               when "cashier"
@@ -48,7 +47,7 @@ class LiveSimulator
       visitor.enter()
 
   run: ->
-    console.log("Starting LIVE mode with #{JSON.stringify(@config.liveMode)}")
+    console.log("Starting LIVE mode with #{JSON.stringify(@config.behaviour)}")
 
     # Create initial group of simulated visitors
     _(@maxVisitorsInLocation).times (n) =>
@@ -60,21 +59,6 @@ class LiveSimulator
         @spawn()
 
 
-@simulateLiveMode = (config) ->
-  simulator = new LiveSimulator config
+@simulateContinuousLiveMode = (config) ->
+  simulator = new ContinuousLiveSimulator config
   simulator.run()
-
-
-# returns array of entrances, products and cashiers beacon
-readBeacons = (config) ->
-  beacons = {entrances: [], products: [], cashiers: []}
-
-  for name, beacon of config.beacons
-    if name.indexOf("entrance") >= 0
-      beacons.entrances.push(beacon)
-    else if name.indexOf("product") >= 0
-      beacons.products.push(beacon)
-    else if name.indexOf("cashier") >= 0
-      beacons.cashiers.push(beacon)
-
-  beacons

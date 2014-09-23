@@ -1,9 +1,10 @@
 class VisitorFactory
-  constructor: (visitorTypes, beacons, secondsPerBeacon, secondsBetweenBeacons) ->
+  constructor: (visitorTypes, beacons, secondsPerBeacon, secondsBetweenBeacons, productBeaconMap) ->
     @beacons = beacons
     @secondsPerBeacon = secondsPerBeacon
     @secondsBetweenBeacons = secondsBetweenBeacons
     @visitorTypes = visitorTypes
+    @productBeaconMap = productBeaconMap
 
   # Given an array of weights (in float), sample the index probabilistically
   sampleWithWeights: (weights) ->
@@ -34,12 +35,11 @@ class VisitorFactory
     for product in productPreferences
       weights.push product.weight
     productName = productPreferences[@sampleWithWeights(weights)].productName
-    for key, product of @beacons.products
-      if product.name == productName
-        return product
+    if @productBeaconMap[productName]
+      return @productBeaconMap[productName]
     console.error("invalid product")
 
-  # We use strategy pattern to dynamically inject the action strategies for the visitor
+  # We use strategy pattern to dynamically inject the action strategies into the visitor
   generate: () ->
     visitorType = @sampleVisitorType()
     factory = @

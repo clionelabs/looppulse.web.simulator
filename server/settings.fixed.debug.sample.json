@@ -1,9 +1,11 @@
 {
+  "simulationMode": "fixed_debug",
+
   "firebase": {
     "root": "https://<YOUR_APP>.firebaseio.com/",
     "path": "/beacon_events"
   },
-  "removeOldData": true,
+
   "rangeTillExit": true,
   "loopingIntervalInSeconds": 0,
 
@@ -36,17 +38,6 @@
       "uuid": "B9407F30-F5F8-466E-AFF9-25556B57FE6D",
       "major": 58020,
       "minor": 34876
-    }
-  },
-
-  "engagementEvents": {
-    "firebaseURL": {
-      "deliveringMessages": "https://<YOUR_APP>.firebaseio.com/delivering_messages"
-    },
-    "lostMessageRatio": 0.25,
-    "secondsBeforeViewed": {
-      "min": 10,
-      "max": 30
     }
   },
 

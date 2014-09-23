@@ -1,0 +1,68 @@
+{
+  "simulationMode": "continuous_live",
+
+  "firebase": {
+    "config": "https://looppulse-config.firebaseio.com/"
+  },
+
+  "application": {
+    "authURL": "http://<YOUR_APP>/api/authenticate/applications/<APP_ID>",
+    "token": "<APP_TOKEN>"
+  },
+
+  "removeOldData": true,
+  "rangeTillExit": true,
+
+  "engagementEvents": {
+    "firebaseURL": {
+      "deliveringMessages": "https://<YOUR_APP>.firebaseio.com/delivering_messages"
+    },
+    "lostMessageRatio": 0.25,
+    "secondsBeforeViewed": {
+      "min": 10,
+      "max": 30
+    }
+  },
+
+  "behaviour": {
+    "maxVisitorsInLocation": 5,
+    "secondsPerBeacon": {
+      "min": 5,
+      "max": 10
+    },
+    "secondsBetweenBeacons": {
+      "min": 5,
+      "max": 10
+    },
+    "visitorTypes": [
+      {
+        "name": "typeOne",
+        "generateWeight": 0.2,
+        "productPreferences": [
+          {
+            "productName": "Coco Curry House",
+            "weight": 0.8
+          },
+          {
+            "productName": "UA Cinemas",
+            "weight": 0.1
+          },
+          {
+            "productName": "Noir Chocolatier",
+            "weight": 0.1
+          }
+        ]
+      },
+      {
+        "name": "typeTwo",
+        "generateWeight": 0.8,
+        "productPreferences": [
+          {
+            "productName": "Coco Curry House",
+            "weight": 1.0
+          }
+        ]
+      }
+    ]
+  }
+}
