@@ -8,13 +8,14 @@ class ContinuousLiveSimulator extends Simulator
 
     @beacons = {entrances: [], products: [], cashiers: []}
     @productBeaconMap = {}
+    @allProducts = {}
 
     firebaseURL = Meteor.settings.firebase.config + "/companies"
     @observeBeaconsFromFirebase(firebaseURL)
     behaviour = config.behaviour
 
     @maxVisitorsInLocation = behaviour.maxVisitorsInLocation
-    @visitorFactory = new VisitorFactory(behaviour.visitorTypes, @beacons, behaviour.secondsPerBeacon, behaviour.secondsBetweenBeacons, @productBeaconMap)
+    @visitorFactory = new VisitorFactory(behaviour, @beacons, @productBeaconMap, @allProducts)
 
   setApplicationPaths: ->
     authUrl = @config.application.authURL
@@ -33,6 +34,11 @@ class ContinuousLiveSimulator extends Simulator
     firebase.on "child_added",
       Meteor.bindEnvironment (childSnapshot, prevChildName) =>
         companyConfig = childSnapshot.val()
+
+        console.info("[LiveSimulator] Adding categories and products")
+        for productKey, product of companyConfig.products
+          @allProducts[productKey] = product
+
         console.info("[LiveSimulator] Adding beacons from Firebase", companyConfig.name)
         for locationKey, locationConfig of companyConfig.locations
           for installationKey, installationConfig of locationConfig.installations
@@ -57,21 +63,7 @@ class ContinuousLiveSimulator extends Simulator
               else
                 console.log("Unknown product type: #{type}")
 
-  spawn: ->
-    if Visitors.find().count() < @maxVisitorsInLocation
-      visitor = @visitorFactory.generate()
-      visitor.enter()
-
   run: ->
-    console.log("Starting LIVE mode with #{JSON.stringify(@config.behaviour)}")
-
-    # Create initial group of simulated visitors
-    _(@maxVisitorsInLocation).times (n) =>
-      @spawn()
-
-    # Re spawn when needed
-    Visitors.find().observe
-      "removed": (oldDoc) =>
-        @spawn()
+    @visitorFactory.start()
 
 @ContinuousLiveSimulator = ContinuousLiveSimulator

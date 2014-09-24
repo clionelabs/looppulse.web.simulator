@@ -6,7 +6,7 @@
     "beacon_events_path": "beacon_events",
     "engagement_events_path": "engagement_events"
   },
-
+ 
   "removeOldData": true,
   "rangeTillExit": true,
 
@@ -54,7 +54,6 @@
   },
 
   "behaviour": {
-    "maxVisitorsInLocation": 5,
     "secondsPerBeacon": {
       "min": 5,
       "max": 10
@@ -65,32 +64,76 @@
     },
     "visitorTypes": [
       {
-        "name": "typeOne",
-        "generateWeight": 0.2,
+        "name": "Foodie"
+      },
+      {
+        "name": "Family",
         "productPreferences": [
           {
-            "productName": "productOne",
-            "weight": 0.8
-          },
-          {
             "productName": "productTwo",
-            "weight": 0.1
+            "weight": 100
           },
           {
             "productName": "productThree",
-            "weight": 0.1
+            "weight": 0
           }
         ]
       },
       {
-        "name": "typeTwo",
-        "generateWeight": 0.8,
+        "name": "Coco Lover",
         "productPreferences": [
           {
-            "productName": "productThree",
-            "weight": 1.0
+            "productName": "productOne",
+            "weight": 100
           }
         ]
+      }
+    ],
+    "periodTypes": [
+      {
+        "name": "normal",
+        "maxVisitors": 10,
+        "visitors": [
+          {
+            "weight": 10,
+            "visitorType": "Family"
+          },
+          {
+            "weight": 100,
+            "visitorType": "Foodie"
+          }
+        ]
+      },
+      {
+        "name": "mealTime",
+        "maxVisitors": 10,
+        "visitors": [
+          {
+            "weight": 10,
+            "visitorType": "Coco Lover"
+          },
+          {
+            "weight": 1,
+            "visitorType": "Family"
+          }
+        ]
+      }
+    ],
+    "periods": [
+      {
+        "startMin": 0,
+        "endMin": 60,
+        "periodType": "normal"
+      },
+      {
+        "startMin": 60,
+        "endMin": 500,
+        "periodType": "mealTime"
+      },
+      {
+        "startMin": 500,
+        "endMin": 1440,
+        "periodType": "normal"
       }
     ]
   }

@@ -7,12 +7,11 @@ class ContinuousDebugSimulator extends Simulator
     @setupFirebase(fbBeaconEventsPath)
     @setupEngagementSimulation(fbEngagementEventsPath)
     
+    @allProducts = {}
     @productBeaconMap = {}
     @readBeacons(config)
 
-    behaviour = config.behaviour
-    @maxVisitorsInLocation = behaviour.maxVisitorsInLocation
-    @visitorFactory = new VisitorFactory(behaviour.visitorTypes, @beacons, behaviour.secondsPerBeacon, behaviour.secondsBetweenBeacons, @productBeaconMap)
+    @visitorFactory = new VisitorFactory(@config.behaviour, @beacons, @productBeaconMap, @allProducts)
 
   # returns array of entrances, products and cashiers beacon
   readBeacons: (config) ->
@@ -24,24 +23,12 @@ class ContinuousDebugSimulator extends Simulator
       else if name.indexOf("product") >= 0
         @beacons.products.push(beacon)
         @productBeaconMap[name] = beacon
+        ## TODO: category is currently not supported for this simulator. categoryPreferences in the config file will be ignored
+        @allProducts[name] = {"name": name, "category": "NOT_SUPPORTED"}
       else if name.indexOf("cashier") >= 0
         @beacons.cashiers.push(beacon)
 
-  spawn: ->
-    if Visitors.find().count() < @maxVisitorsInLocation
-      visitor = @visitorFactory.generate()
-      visitor.enter()
-
   run: ->
-    console.log("Starting LIVE mode with #{JSON.stringify(@config.behaviour)}")
-
-    # Create initial group of simulated visitors
-    _(@maxVisitorsInLocation).times (n) =>
-      @spawn()
-
-    # Re spawn when needed
-    Visitors.find().observe
-      "removed": (oldDoc) =>
-        @spawn()
+    @visitorFactory.start()
 
 @ContinuousDebugSimulator = ContinuousDebugSimulator

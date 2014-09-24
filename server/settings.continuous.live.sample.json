@@ -25,7 +25,6 @@
   },
 
   "behaviour": {
-    "maxVisitorsInLocation": 5,
     "secondsPerBeacon": {
       "min": 5,
       "max": 10
@@ -36,32 +35,84 @@
     },
     "visitorTypes": [
       {
-        "name": "typeOne",
-        "generateWeight": 0.2,
-        "productPreferences": [
+        "name": "Foodie",
+        "categoryPreferences": [
           {
-            "productName": "Coco Curry House",
-            "weight": 0.8
-          },
-          {
-            "productName": "UA Cinemas",
-            "weight": 0.1
-          },
-          {
-            "productName": "Noir Chocolatier",
-            "weight": 0.1
+            "weight": 100,
+            "categoryName": "Food"
           }
         ]
       },
       {
-        "name": "typeTwo",
-        "generateWeight": 0.8,
+        "name": "Family",
+        "categoryPreferences": [
+          {
+            "weight": 100,
+            "categoryName": "Children"
+          }
+        ]
+      },
+      {
+        "name": "Coco Lover",
+        "categoryPreferences": [
+          {
+            "weight": 100,
+            "categoryName": "Food"
+          }
+        ],
         "productPreferences": [
           {
             "productName": "Coco Curry House",
-            "weight": 1.0
+            "weight": 100
           }
         ]
+      }
+    ],
+    "periodTypes": [
+      {
+        "name": "normal",
+        "maxVisitors": 10,
+        "visitors": [
+          {
+            "weight": 10,
+            "visitorType": "Family"
+          },
+          {
+            "weight": 100,
+            "visitorType": "Foodie"
+          }
+        ]
+      },
+      {
+        "name": "mealTime",
+        "maxVisitors": 10,
+        "visitors": [
+          {
+            "weight": 10,
+            "visitorType": "Coco Lover"
+          },
+          {
+            "weight": 1,
+            "visitorType": "Family"
+          }
+        ]
+      }
+    ],
+    "periods": [
+      {
+        "startMin": 0,
+        "endMin": 60,
+        "periodType": "normal"
+      },
+      {
+        "startMin": 60,
+        "endMin": 500,
+        "periodType": "mealTime"
+      },
+      {
+        "startMin": 500,
+        "endMin": 1440,
+        "periodType": "normal"
       }
     ]
   }

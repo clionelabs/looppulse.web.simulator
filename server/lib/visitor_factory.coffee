@@ -1,10 +1,35 @@
 class VisitorFactory
-  constructor: (visitorTypes, beacons, secondsPerBeacon, secondsBetweenBeacons, productBeaconMap) ->
+  constructor: (behaviour, beacons, productBeaconMap, allProducts) ->
     @beacons = beacons
-    @secondsPerBeacon = secondsPerBeacon
-    @secondsBetweenBeacons = secondsBetweenBeacons
-    @visitorTypes = visitorTypes
+    @behaviour = behaviour
+    @periods = behaviour.periods
+    @visitorTypes = behaviour.visitorTypes
+    @periodTypes = behaviour.periodTypes
+    @secondsPerBeacon = behaviour.secondsPerBeacon
+    @secondsBetweenBeacons = behaviour.secondsBetweenBeacons
     @productBeaconMap = productBeaconMap
+    @allProducts = allProducts
+
+    @counterSampledVisitorTypes = {}
+    @counterSampledProducts = {}
+
+  # compute the final product weights for visitor type, given their preferences
+  buildVisitorTypesProductWeight: (visitorType) ->
+    weights = []
+    for productKey, product of @allProducts
+      weight = 1.0
+      categoryPreferences = visitorType.categoryPreferences
+      productPreferences = visitorType.productPreferences
+      if categoryPreferences
+        for catPreference in categoryPreferences
+          if catPreference.categoryName == product.category
+            weight *= catPreference.weight
+      if productPreferences
+        for proPreference in productPreferences
+          if proPreference.productName == productKey
+            weight *= proPreference.weight
+      weights.push({"productKey": productKey, "weight": weight})
+    return weights
 
   # Given an array of weights (in float), sample the index probabilistically
   sampleWithWeights: (weights) ->
@@ -23,36 +48,93 @@ class VisitorFactory
     return 0
 
   # Sample a visitor type probabilistically
-  sampleVisitorType: () ->
+  sampleVisitorType: (visitorTypesRatio) ->
     weights = []
+    visitorTypes = []
     for visitorType in @visitorTypes
-      weights.push visitorType.generateWeight
-    return @visitorTypes[@sampleWithWeights(weights)]
+      weight = 1.0
+      for visitorTypeRatio in visitorTypesRatio
+        if visitorTypeRatio.visitorType == visitorType.name
+          weight *= visitorTypeRatio.weight
+      visitorTypes.push(visitorType)
+      weights.push(weight)
+    sampledVisitorType = visitorTypes[@sampleWithWeights(weights)]
+
+    if !@counterSampledVisitorTypes[sampledVisitorType.name]
+      @counterSampledVisitorTypes[sampledVisitorType.name] = 1
+    else
+      @counterSampledVisitorTypes[sampledVisitorType.name]++
+
+    return sampledVisitorType
 
   # Sample a product for the visitor browse action probabilistically according to preferences
-  sampleBrowseProduct: (productPreferences) ->
+  sampleBrowseProduct: (visitorType) ->
+    productWeights = @buildVisitorTypesProductWeight(visitorType)
     weights = []
-    for product in productPreferences
-      weights.push product.weight
-    productName = productPreferences[@sampleWithWeights(weights)].productName
-    if @productBeaconMap[productName]
-      return @productBeaconMap[productName]
-    console.error("invalid product")
+    products = []
+    for pw in productWeights
+      weights.push(pw.weight)
+      products.push(pw.productKey)
+    productKey = products[@sampleWithWeights(weights)]
+
+    sampledProduct = @productBeaconMap[productKey]
+
+    if !@counterSampledProducts[productKey]
+      @counterSampledProducts[productKey] = 1
+    else
+      @counterSampledProducts[productKey]++
+
+    return sampledProduct
+
+  # Get current behaviour period
+  getCurrentPeriod: ->
+    dt = new Date()
+    currentMinuteOfDay = dt.getMinutes() + 60 * dt.getHours()
+
+    for period in @periods
+      if currentMinuteOfDay >= period.startMin && currentMinuteOfDay <= period.endMin
+        return @getPeriodType(period.periodType)
+    return null
+
+  getPeriodType: (name) ->
+    for periodType in @periodTypes
+      if periodType.name == name
+        return periodType
+    return null
 
   # We use strategy pattern to dynamically inject the action strategies into the visitor
   generate: () ->
-    visitorType = @sampleVisitorType()
+    period = @getCurrentPeriod()
+
+    if period == null
+      return
+
+    maxVisitors = period.maxVisitors
+    remainVisitors = maxVisitors - Visitors.find().count()
+
+    if remainVisitors <= 0
+      return
+
     factory = @
-    browseStrategy = () ->
-      do (visitorType, factory) ->
-        product = factory.sampleBrowseProduct(visitorType.productPreferences)
-        return product
+    for n in [1..remainVisitors]
+      visitorType = @sampleVisitorType(period.visitors)
 
-    strategies = {
-      'browseStrategy': browseStrategy
-    }
-    visitor = new Visitor(@beacons, @secondsPerBeacon, @secondsBetweenBeacons, strategies)
+      browseStrategy = () ->
+        do (visitorType, factory) ->
+          return factory.sampleBrowseProduct(visitorType)
 
-    return visitor
+      strategies = {
+        'browseStrategy': browseStrategy
+      }
+      visitor = new Visitor(@beacons, @secondsPerBeacon, @secondsBetweenBeacons, strategies)
+      visitor.enter()
+
+    console.log("[Generator] statistics", JSON.stringify(@counterSampledVisitorTypes), JSON.stringify(@counterSampledProducts))
+
+  start: () ->
+    factory = @
+    setInterval ->
+       factory.generate()
+    , 5 * 1000
 
 @VisitorFactory = VisitorFactory
