@@ -1,0 +1,67 @@
+{
+  "simulationMode": "fixed_debug",
+
+  "firebase": {
+    "root": "https://hiukim-lp-dev-beacon-events.firebaseio.com/",
+    "path": "/beacon_events"
+  },
+ 
+  "rangeTillExit": true,
+  "loopingIntervalInSeconds": 3,
+
+  "beacons": {
+    "entranceOne": {
+      "uuid": "74278BDA-B644-4520-8F0C-720EAF059935",
+      "major": 100,
+      "minor": 0
+    },
+
+    "cashierOne": {
+      "uuid": "E2C56DB5-DFFB-48D2-B060-D0F5A71096E0",
+      "major": 10,
+      "minor": 0
+    },
+
+    "productOne": {
+      "uuid": "B9407F30-F5F8-466E-AFF9-25556B57FE6D",
+      "major": 28364,
+      "minor": 4756
+    },
+
+    "productTwo": {
+      "uuid": "B9407F30-F5F8-466E-AFF9-25556B57FE6D",
+      "major": 54330,
+      "minor": 38700
+    },
+
+    "productThree": {
+      "uuid": "B9407F30-F5F8-466E-AFF9-25556B57FE6D",
+      "major": 58020,
+      "minor": 34876
+    }
+  },
+
+  "visitors": {
+    "visitorOne": {
+      "uuid": "D7AD6E44-7A9E-4A76-9227-C16903E549A5",
+      "encounters": [
+        {
+          "beacon": "entranceOne",
+          "delayInSeconds": 0,
+          "durationInSeconds": 5
+        },
+        {
+          "beacon": "productThree",
+          "delayInSeconds": 10,
+          "durationInSeconds": 10
+        },
+        {
+          "beacon": "cashierOne",
+          "delayInSeconds": 20,
+          "durationInSeconds": 10
+        }
+      ]
+    }
+
+  }
+}

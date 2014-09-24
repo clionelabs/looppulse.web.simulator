@@ -1,15 +1,31 @@
-class ContinuousLiveSimulator
+class ContinuousLiveSimulator extends Simulator
   constructor: (config) ->
     @config = config
+
+    @setApplicationPaths()
+    @setupFirebase(@beaconEventsFbPath)
+    @setupEngagementSimulation(@engagementEventsFbPath)
+
     @beacons = {entrances: [], products: [], cashiers: []}
     @productBeaconMap = {}
 
+    firebaseURL = Meteor.settings.firebase.config + "/companies"
+    @observeBeaconsFromFirebase(firebaseURL)
     behaviour = config.behaviour
+
     @maxVisitorsInLocation = behaviour.maxVisitorsInLocation
     @visitorFactory = new VisitorFactory(behaviour.visitorTypes, @beacons, behaviour.secondsPerBeacon, behaviour.secondsBetweenBeacons, @productBeaconMap)
 
-    firebaseURL = Meteor.settings.firebase.config + "/companies"
-    @observeBeaconsFromFirebase(firebaseURL)
+  setApplicationPaths: ->
+    authUrl = @config.application.authURL
+    result = HTTP.get(authUrl, {
+      headers: {
+        "x-auth-token": @config.application.token
+      }
+    })
+    console.log("Authenticated with", JSON.stringify(result))
+    @beaconEventsFbPath = result.data.system.firebase.beacon_events
+    @engagementEventsFbPath = result.data.system.firebase.engagement_events
 
   observeBeaconsFromFirebase: (firebaseURL) ->
     console.info("[LiveSimulator] Observing beacons from Firebase", firebaseURL)
@@ -58,7 +74,4 @@ class ContinuousLiveSimulator
       "removed": (oldDoc) =>
         @spawn()
 
-
-@simulateContinuousLiveMode = (config) ->
-  simulator = new ContinuousLiveSimulator config
-  simulator.run()
+@ContinuousLiveSimulator = ContinuousLiveSimulator

@@ -1,7 +1,12 @@
-class ContinuousDebugSimulator
+class ContinuousDebugSimulator extends Simulator
   constructor: (config) ->
-    @config = config
-    # TODO model beacons as collection?
+    super config
+
+    fbBeaconEventsPath = @config.firebase.root + @config.firebase.beacon_events_path
+    fbEngagementEventsPath = @config.firebase.root + @config.firebase.engagement_events_path
+    @setupFirebase(fbBeaconEventsPath)
+    @setupEngagementSimulation(fbEngagementEventsPath)
+    
     @productBeaconMap = {}
     @readBeacons(config)
 
@@ -39,7 +44,4 @@ class ContinuousDebugSimulator
       "removed": (oldDoc) =>
         @spawn()
 
-
-@simulateContinuousDebugMode = (config) ->
-  simulator = new ContinuousDebugSimulator config
-  simulator.run()
+@ContinuousDebugSimulator = ContinuousDebugSimulator
