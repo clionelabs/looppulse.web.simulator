@@ -1,0 +1,152 @@
+{
+  "simulationMode": "continuous_debug",
+
+  "firebase": {
+    "root": "https://<YOUR_APP>.firebaseio.com/",
+    "beacon_events_path": "beacon_events",
+    "engagement_events_path": "engagement_events"
+  },
+ 
+  "removeOldData": true,
+  "rangeTillExit": true,
+
+  "beacons": {
+    "entranceOne": {
+      "uuid": "74278BDA-B644-4520-8F0C-720EAF059935",
+      "major": 100,
+      "minor": 0
+    },
+
+    "cashierOne": {
+      "uuid": "E2C56DB5-DFFB-48D2-B060-D0F5A71096E0",
+      "major": 10,
+      "minor": 0
+    },
+
+    "productOne": {
+      "uuid": "B9407F30-F5F8-466E-AFF9-25556B57FE6D",
+      "major": 28364,
+      "minor": 4756
+    },
+
+    "productTwo": {
+      "uuid": "B9407F30-F5F8-466E-AFF9-25556B57FE6D",
+      "major": 54330,
+      "minor": 38700
+    },
+
+    "productThree": {
+      "uuid": "B9407F30-F5F8-466E-AFF9-25556B57FE6D",
+      "major": 58020,
+      "minor": 34876
+    }
+  },
+
+  "engagementEvents": {
+    "firebaseURL": {
+      "deliveringMessages": "https://<YOUR_APP>.firebaseio.com/delivering_messages"
+    },
+    "lostMessageRatio": 0.25,
+    "secondsBeforeViewed": {
+      "min": 10,
+      "max": 30
+    }
+  },
+
+  "behaviour": {
+    "secondsPerBeacon": {
+      "min": 5,
+      "max": 10
+    },
+    "secondsBetweenBeacons": {
+      "min": 5,
+      "max": 10
+    },
+    "visitorTypes": [
+      {
+        "name": "Foodie",
+        "stayTime": {
+          "mean": 10,
+          "std": 5
+        }
+      },
+      {
+        "name": "Family",
+        "stayTime": {
+          "mean": 50,
+          "std": 10
+        },
+        "productPreferences": [
+          {
+            "productName": "productTwo",
+            "weight": 100
+          },
+          {
+            "productName": "productThree",
+            "weight": 0
+          }
+        ]
+      },
+      {
+        "name": "Coco Lover",
+        "stayTime": {
+          "mean": 5,
+          "std": 0
+        },
+        "productPreferences": [
+          {
+            "productName": "productOne",
+            "weight": 100
+          }
+        ]
+      }
+    ],
+    "periodTypes": [
+      {
+        "name": "normal",
+        "maxVisitors": 10,
+        "visitors": [
+          {
+            "weight": 10,
+            "visitorType": "Family"
+          },
+          {
+            "weight": 100,
+            "visitorType": "Foodie"
+          }
+        ]
+      },
+      {
+        "name": "mealTime",
+        "maxVisitors": 10,
+        "visitors": [
+          {
+            "weight": 10,
+            "visitorType": "Coco Lover"
+          },
+          {
+            "weight": 1,
+            "visitorType": "Family"
+          }
+        ]
+      }
+    ],
+    "periods": [
+      {
+        "startMin": 0,
+        "endMin": 60,
+        "periodType": "normal"
+      },
+      {
+        "startMin": 60,
+        "endMin": 500,
+        "periodType": "mealTime"
+      },
+      {
+        "startMin": 500,
+        "endMin": 1440,
+        "periodType": "normal"
+      }
+    ]
+  }
+}

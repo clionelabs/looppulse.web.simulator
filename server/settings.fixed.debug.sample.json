@@ -1,17 +1,13 @@
 {
+  "simulationMode": "fixed_debug",
+
   "firebase": {
     "root": "https://<YOUR_APP>.firebaseio.com/",
-    "path": "/beacon_events",
-    "config": "https://looppulse-config.firebaseio.com/"
+    "path": "/beacon_events"
   },
-  "removeOldData": true,
+
   "rangeTillExit": true,
   "loopingIntervalInSeconds": 0,
-
-  "application": {
-    "authURL": "",
-    "token": ""
-  },
 
   "beacons": {
     "entranceOne": {
@@ -45,26 +41,27 @@
     }
   },
 
-  "engagementEvents": {
-    "firebaseURL": {
-      "deliveringMessages": "https://<YOUR_APP>.firebaseio.com/delivering_messages"
-    },
-    "lostMessageRatio": 0.25,
-    "secondsBeforeViewed": {
-      "min": 10,
-      "max": 30
+  "visitors": {
+    "visitorOne": {
+      "uuid": "D7AD6E44-7A9E-4A76-9227-C16903E549A5",
+      "encounters": [
+        {
+          "beacon": "entranceOne",
+          "delayInSeconds": 0,
+          "durationInSeconds": 5
+        },
+        {
+          "beacon": "productThree",
+          "delayInSeconds": 10,
+          "durationInSeconds": 10
+        },
+        {
+          "beacon": "cashierOne",
+          "delayInSeconds": 20,
+          "durationInSeconds": 10
+        }
+      ]
     }
-  },
 
-  "liveMode": {
-    "maxVisitorsInLocation": 5,
-    "secondsPerBeacon": {
-      "min": 5,
-      "max": 10
-    },
-    "secondsBetweenBeacons": {
-      "min": 5,
-      "max": 10
-    }
   }
 }

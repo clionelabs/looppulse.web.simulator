@@ -1,0 +1,131 @@
+{
+  "simulationMode": "continuous_live",
+
+  "firebase": {
+    "config": "https://looppulse-config.firebaseio.com/"
+  },
+
+  "application": {
+    "authURL": "http://<YOUR_APP>/api/authenticate/applications/<APP_ID>",
+    "token": "<APP_TOKEN>"
+  },
+
+  "removeOldData": true,
+  "rangeTillExit": true,
+
+  "engagementEvents": {
+    "firebaseURL": {
+      "deliveringMessages": "https://<YOUR_APP>.firebaseio.com/delivering_messages"
+    },
+    "lostMessageRatio": 0.25,
+    "secondsBeforeViewed": {
+      "min": 10,
+      "max": 30
+    }
+  },
+
+  "behaviour": {
+    "secondsPerBeacon": {
+      "min": 5,
+      "max": 10
+    },
+    "secondsBetweenBeacons": {
+      "min": 5,
+      "max": 10
+    },
+    "visitorTypes": [
+      {
+        "name": "Foodie",
+        "stayTime": {
+          "mean": 10,
+          "std": 5
+        },
+        "categoryPreferences": [
+          {
+            "weight": 100,
+            "categoryName": "Food"
+          }
+        ]
+      },
+      {
+        "name": "Family",
+        "stayTime": {
+          "mean": 20,
+          "std": 20
+        },
+        "categoryPreferences": [
+          {
+            "weight": 100,
+            "categoryName": "Children"
+          }
+        ]
+      },
+      {
+        "name": "Coco Lover",
+        "stayTime": {
+          "mean": 10,
+          "std": 0
+        },
+        "categoryPreferences": [
+          {
+            "weight": 100,
+            "categoryName": "Food"
+          }
+        ],
+        "productPreferences": [
+          {
+            "productName": "Coco Curry House",
+            "weight": 100
+          }
+        ]
+      }
+    ],
+    "periodTypes": [
+      {
+        "name": "normal",
+        "maxVisitors": 10,
+        "visitors": [
+          {
+            "weight": 10,
+            "visitorType": "Family"
+          },
+          {
+            "weight": 100,
+            "visitorType": "Foodie"
+          }
+        ]
+      },
+      {
+        "name": "mealTime",
+        "maxVisitors": 10,
+        "visitors": [
+          {
+            "weight": 10,
+            "visitorType": "Coco Lover"
+          },
+          {
+            "weight": 1,
+            "visitorType": "Family"
+          }
+        ]
+      }
+    ],
+    "periods": [
+      {
+        "startMin": 0,
+        "endMin": 60,
+        "periodType": "normal"
+      },
+      {
+        "startMin": 60,
+        "endMin": 500,
+        "periodType": "mealTime"
+      },
+      {
+        "startMin": 500,
+        "endMin": 1440,
+        "periodType": "normal"
+      }
+    ]
+  }
+}

@@ -5,3 +5,5 @@
 /server/simulation.json
 
 /server/simulation.live.json
+
+*.swp
