@@ -3,6 +3,7 @@
 
   "firebase": {
     "root": "https://<YOUR_APP>.firebaseio.com/",
+    "rootSecret": "<YOUR_APP_SECRET>",
     "beacon_events_path": "beacon_events",
     "engagement_events_path": "engagement_events"
   },

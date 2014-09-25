@@ -8,7 +8,7 @@ class Simulator
       firebase.remove()
       console.log("[Sim] Removed old data on: " + fbPath)
 
-    console.log("[Sim] Writing simulated events to: " + fbPath)
+      console.log("[Sim] Writing simulated events to: " + fbPath)
 
     Events.find().observe({
       'added': (doc) ->
