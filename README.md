@@ -35,6 +35,7 @@ Update config file:
   -  `behaviour` -> simulation rules for visitor generation and behaviourial patterns. (More explanations below)
 
 Simulation Rules
+
 1. Terminologies
   - `VisitorType` specify a group of visitor, e.g. "Foodie"
   - `PeriodType` specify a type of time period, e.g. "MealTime", "RegularHours". A time period would include the proportion of visitor types, e.g. in "MealTime", there would be a lot more "Foodie" appears. It also contains the maximum number of visitors during that period.
@@ -109,6 +110,7 @@ Simulation Rules
       }
     ]
     ```
+    
   - `Period`
     ```
     [
@@ -129,6 +131,7 @@ Simulation Rules
       }
     ]
     ```
+    
     Note: Currently, periods are specified in a daily basis (1440 minutes). The basic unit is minute. You would explicitly mention that from minute X to minute Y is a certain period. The above example would mean that from minute 420 to minute 540 of the day (i.e. 7am to 9am) would be mealTime. Other than that, it's normal time.
     
 A detailed sample configuration file can be found under the `server` directory.
