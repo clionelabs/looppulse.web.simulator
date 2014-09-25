@@ -43,7 +43,7 @@ Simulation Rules
 
 
 2. How does it work
-  1. Create a list of visitor types, each contains a set of category/product preferences
+  1. Create a list of visitor types, each contains a set of category/product preferences. It also characterise the expected duration of staying in the product beacon. The duration is sampled with a normal distribution with mean and std (in seconds)
   2. Create a list of period types, each contains a set of "weights" correspond to the relative amount of visitor types being generated in that period.
   3. Define a day by splitting it into a sequence of periods. For example, from 12:00am to 7am is "RegularHours", 7am to 9am is "MealTime", so and so.
 
@@ -52,6 +52,10 @@ Simulation Rules
     ```
     {
         "name": "Foodie",
+        "stayTime": {
+          "mean": 100,
+          "std": 10
+        },
         "categoryPreferences": [
           {
             "weight": 100,

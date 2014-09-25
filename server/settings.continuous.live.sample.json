@@ -36,6 +36,10 @@
     "visitorTypes": [
       {
         "name": "Foodie",
+        "stayTime": {
+          "mean": 10,
+          "std": 5
+        },
         "categoryPreferences": [
           {
             "weight": 100,
@@ -45,6 +49,10 @@
       },
       {
         "name": "Family",
+        "stayTime": {
+          "mean": 20,
+          "std": 20
+        },
         "categoryPreferences": [
           {
             "weight": 100,
@@ -54,6 +62,10 @@
       },
       {
         "name": "Coco Lover",
+        "stayTime": {
+          "mean": 10,
+          "std": 0
+        },
         "categoryPreferences": [
           {
             "weight": 100,

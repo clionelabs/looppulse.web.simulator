@@ -86,6 +86,16 @@ class VisitorFactory
 
     return sampledProduct
 
+  # Sample a stay duration for the visitor
+  sampleStayProductDuration: (visitorType) ->
+    mean = visitorType.stayTime.mean
+    std = visitorType.stayTime.std
+
+    duration = Math.round(Random.gaussian(mean, std))
+    duration = Math.max(0, duration)
+
+    return duration * 1000
+
   # Get current behaviour period
   getCurrentPeriod: ->
     dt = new Date()
@@ -106,6 +116,8 @@ class VisitorFactory
   generate: () ->
     period = @getCurrentPeriod()
 
+    console.log("[Generator] current period: ", JSON.stringify(period))
+
     if period == null
       return
 
@@ -123,9 +135,15 @@ class VisitorFactory
         do (visitorType, factory) ->
           return factory.sampleBrowseProduct(visitorType)
 
+      stayProductDurationStrategy = () ->
+        do (visitorType, factory) ->
+          return factory.sampleStayProductDuration(visitorType)
+
       strategies = {
-        'browseStrategy': browseStrategy
+        'browseStrategy': browseStrategy,
+        'stayProductDurationStrategy': stayProductDurationStrategy
       }
+
       visitor = new Visitor(@beacons, @secondsPerBeacon, @secondsBetweenBeacons, strategies)
       visitor.enter()
 

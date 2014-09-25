@@ -8,6 +8,7 @@ class Visitor
     @secondsPerBeacon = secondsPerBeacon
     @secondsBetweenBeacons = secondsBetweenBeacons
     @browseStrategy = strategies.browseStrategy
+    @stayProductDurationStrategy = strategies.stayProductDurationStrategy
     @uuid = Random.uuid()
 
   save: () ->
@@ -20,37 +21,41 @@ class Visitor
   enter: () =>
     @state = "entered"
     beacon = Random.pickOne(@entrances)
-    @stay(beacon)
+    duration = 1000 * Random.seconds(@secondsPerBeacon.min, @secondsPerBeacon.max)
+    @stay(beacon, duration)
 
   browse: () =>
     @state = "browsed"
     beacon = @browseStrategy()
-    @stay(beacon)
+    duration = @stayProductDurationStrategy()
+    @stay(beacon, duration)
 
   purchase: () =>
     @state = "purchased"
     beacon = Random.pickOne(@cashiers)
-    @stay(beacon)
+    duration = 1000 * Random.seconds(@secondsPerBeacon.min, @secondsPerBeacon.max)
+    @stay(beacon, duration)
 
   exit: () =>
     @state = "exited"
     beacon = Random.pickOne(@entrances)
-    @stay(beacon)
+    duration = 1000 * Random.seconds(@secondsPerBeacon.min, @secondsPerBeacon.max)
+    @stay(beacon, duration)
 
   revisited: () =>
     @state = "revisited"
     beacon = Random.pickOne(@entrances)
-    @stay(beacon)
+    duration = 1000 * Random.seconds(@secondsPerBeacon.min, @secondsPerBeacon.max)
+    @stay(beacon, duration)
 
   remove: () =>
     Visitors.remove({uuid: @uuid})
 
-  stay: (beacon) =>
+  stay: (beacon, beaconDuration) =>
     # We could pass in rangeTillExit in the constructor but maybe we should
     # just let Encounter to read it from the global setting file.
     rangeTillExit = Meteor.settings.rangeTillExit
-    duration = 1000 * Random.seconds(@secondsPerBeacon.min,
-                                     @secondsPerBeacon.max)
+    duration = beaconDuration
 
     if beacon
       encounter = new Encounter(this, beacon, duration, rangeTillExit)

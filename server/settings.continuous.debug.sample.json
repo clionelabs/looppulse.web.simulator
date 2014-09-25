@@ -64,10 +64,18 @@
     },
     "visitorTypes": [
       {
-        "name": "Foodie"
+        "name": "Foodie",
+        "stayTime": {
+          "mean": 10,
+          "std": 5
+        }
       },
       {
         "name": "Family",
+        "stayTime": {
+          "mean": 50,
+          "std": 10
+        },
         "productPreferences": [
           {
             "productName": "productTwo",
@@ -81,6 +89,10 @@
       },
       {
         "name": "Coco Lover",
+        "stayTime": {
+          "mean": 5,
+          "std": 0
+        },
         "productPreferences": [
           {
             "productName": "productOne",
