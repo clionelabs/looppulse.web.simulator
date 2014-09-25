@@ -128,6 +128,8 @@ class VisitorFactory
       return
 
     factory = @
+    secondsPerBeacon = @secondsPerBeacon
+    secondsBetweenBeacons = @secondsBetweenBeacons
     for n in [1..remainVisitors]
       visitorType = @sampleVisitorType(period.visitors)
 
@@ -139,12 +141,22 @@ class VisitorFactory
         do (visitorType, factory) ->
           return factory.sampleStayProductDuration(visitorType)
 
+      stayGeneralDurationStrategy = () ->
+        do (secondsPerBeacon) ->
+            return 1000 * Random.seconds(secondsPerBeacon.min, secondsPerBeacon.max)
+
+      travelDurationStrategy = () ->
+        do (secondsBetweenBeacons) ->
+            return 1000 * Random.seconds(secondsBetweenBeacons.min, secondsBetweenBeacons.max)
+
       strategies = {
         'browseStrategy': browseStrategy,
-        'stayProductDurationStrategy': stayProductDurationStrategy
+        'stayProductDurationStrategy': stayProductDurationStrategy,
+        'stayGeneralDurationStrategy': stayGeneralDurationStrategy,
+        'travelDurationStrategy': travelDurationStrategy
       }
 
-      visitor = new Visitor(@beacons, @secondsPerBeacon, @secondsBetweenBeacons, strategies)
+      visitor = new Visitor(@beacons, strategies)
       visitor.enter()
 
     console.log("[Generator] statistics", JSON.stringify(@counterSampledVisitorTypes), JSON.stringify(@counterSampledProducts))

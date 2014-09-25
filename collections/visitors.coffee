@@ -1,14 +1,14 @@
 @Visitors = new Meteor.Collection(null)
 
 class Visitor
-  constructor: (beacons, secondsPerBeacon, secondsBetweenBeacons, strategies) ->
+  constructor: (beacons, strategies) ->
     @entrances = beacons.entrances
     @products = beacons.products
     @cashiers = beacons.cashiers
-    @secondsPerBeacon = secondsPerBeacon
-    @secondsBetweenBeacons = secondsBetweenBeacons
     @browseStrategy = strategies.browseStrategy
     @stayProductDurationStrategy = strategies.stayProductDurationStrategy
+    @stayGeneralDurationStrategy = strategies.stayGeneralDurationStrategy
+    @travelDurationStrategy = strategies.travelDurationStrategy
     @uuid = Random.uuid()
 
   save: () ->
@@ -21,7 +21,7 @@ class Visitor
   enter: () =>
     @state = "entered"
     beacon = Random.pickOne(@entrances)
-    duration = 1000 * Random.seconds(@secondsPerBeacon.min, @secondsPerBeacon.max)
+    duration = @stayGeneralDurationStrategy()
     @stay(beacon, duration)
 
   browse: () =>
@@ -33,19 +33,19 @@ class Visitor
   purchase: () =>
     @state = "purchased"
     beacon = Random.pickOne(@cashiers)
-    duration = 1000 * Random.seconds(@secondsPerBeacon.min, @secondsPerBeacon.max)
+    duration = @stayGeneralDurationStrategy()
     @stay(beacon, duration)
 
   exit: () =>
     @state = "exited"
     beacon = Random.pickOne(@entrances)
-    duration = 1000 * Random.seconds(@secondsPerBeacon.min, @secondsPerBeacon.max)
+    duration = @stayGeneralDurationStrategy()
     @stay(beacon, duration)
 
   revisited: () =>
     @state = "revisited"
     beacon = Random.pickOne(@entrances)
-    duration = 1000 * Random.seconds(@secondsPerBeacon.min, @secondsPerBeacon.max)
+    duration = @stayGeneralDurationStrategy()
     @stay(beacon, duration)
 
   remove: () =>
@@ -62,8 +62,8 @@ class Visitor
       encounter.simulate()
 
     # Since we don't have teleporter yet, there should be a delay between beacons.
-    travelTime = 1000 * Random.seconds(@secondsBetweenBeacons.min,
-                                       @secondsBetweenBeacons.max)
+    travelTime = @travelDurationStrategy()
+
     interval = duration + travelTime
     setTimeout((=> @nextMove()), interval)
     @save()
