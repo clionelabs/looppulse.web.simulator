@@ -22,7 +22,7 @@ class ContinuousLiveSimulator extends Simulator
         "x-auth-token": @config.application.token
       }
     })
-    console.log("Authenticated with", JSON.stringify(result))
+    console.log("Authenticated with", @config.application.authURL, JSON.stringify(result))
     @beaconEventsFbPath = result.data.system.firebase.beacon_events
     @engagementEventsFbPath = result.data.system.firebase.engagement_events
 
