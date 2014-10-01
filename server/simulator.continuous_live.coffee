@@ -29,7 +29,7 @@ class ContinuousLiveSimulator extends Simulator
     firebaseRef = new Firebase(@beaconEventsFbPath)
     firebaseRef.auth result.data.system.firebase.token, Meteor.bindEnvironment (error, result) =>
       if error
-        console.error('Login Failed!', error)
+        console.error('Login Failed!', @beaconEventsFbPath, error)
       else
         console.info('Authenticated successfully with payload:', result.auth)
         console.info('Auth expires at:', new Date(result.expires * 1000))

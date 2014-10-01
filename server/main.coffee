@@ -5,7 +5,7 @@ firebaseSecret = Meteor.settings.firebase.rootSecret or Meteor.settings.firebase
 firebaseRef = new Firebase(firebaseUrl)
 firebaseRef.auth firebaseSecret, Meteor.bindEnvironment (error, result) ->
   if error
-    console.error('Login Failed!', error)
+    console.error('Login Failed!', firebaseUrl, error)
   else
     console.info('Authenticated successfully with payload:', result.auth)
     console.info('Auth expires at:', new Date(result.expires * 1000))
