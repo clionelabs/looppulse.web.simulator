@@ -15,6 +15,8 @@ class Simulator
         firebase.push(doc, (error) ->
           if error
             console.log("[Firebase] Error: " + error + ",\n while simulating event: " + doc)
+          else
+            console.log("[Firebase] Published event: ", JSON.stringify(doc))
         )
     })
 
