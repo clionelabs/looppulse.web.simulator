@@ -17,9 +17,16 @@ class ContinuousLiveSimulator extends Simulator
 
   setApplicationPaths: ->
     authUrl = @config.application.authURL
-    result = HTTP.get(authUrl, {
+    result = HTTP.post(authUrl, {
+      data: {
+        session: {
+          visitorUUID: '17dba1647591d871707bef5f',  # FIXME genertate this
+          sdk: '0.0',
+          device: 'simulator'
+        }
+      },
       headers: {
-        "x-auth-token": @config.application.token
+        'x-auth-token': @config.application.token
       }
     })
     console.log("Authenticated with", @config.application.authURL, JSON.stringify(result))

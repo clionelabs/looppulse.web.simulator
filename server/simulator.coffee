@@ -12,6 +12,7 @@ class Simulator
 
     Events.find().observe({
       'added': (doc) ->
+        # FIXME make sure doc.session_id is set
         firebase.push(doc, (error) ->
           if error
             console.log("[Firebase] Error: " + error + ",\n while simulating event: " + doc)
