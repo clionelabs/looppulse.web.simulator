@@ -18,6 +18,11 @@ class Simulator
             console.log("[Firebase] Error: " + error + ",\n while simulating event: " + doc)
           else
             console.log("[Firebase] Published event: ", JSON.stringify(doc))
+          # We have to remove the event once processed because the
+          # Events.upsert() will eventually cause a serious back log.
+          # Another solution is to index the Events collection but that
+          # would require it to be turned into a persistent colleciotn
+          Events.remove({_id: doc._id})
         )
     })
 
