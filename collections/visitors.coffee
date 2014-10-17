@@ -4,7 +4,6 @@ class Visitor
   constructor: (beacons, strategies) ->
     @entrances = beacons.entrances
     @products = beacons.products
-    @cashiers = beacons.cashiers
     @browseStrategy = strategies.browseStrategy
     @stayProductDurationStrategy = strategies.stayProductDurationStrategy
     @stayGeneralDurationStrategy = strategies.stayGeneralDurationStrategy
@@ -28,12 +27,6 @@ class Visitor
     @state = "browsed"
     beacon = @browseStrategy()
     duration = @stayProductDurationStrategy()
-    @stay(beacon, duration)
-
-  purchase: () =>
-    @state = "purchased"
-    beacon = Random.pickOne(@cashiers)
-    duration = @stayGeneralDurationStrategy()
     @stay(beacon, duration)
 
   exit: () =>
@@ -81,8 +74,6 @@ class Visitor
       when "entered"
         [@browse, @exit]
       when "browsed"
-        [@browse, @purchase, @exit]
-      when "purchased"
         [@browse, @exit]
       when "exited"
         [@revisited, @remove]
