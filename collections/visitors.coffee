@@ -8,6 +8,7 @@ class Visitor
     @stayProductDurationStrategy = strategies.stayProductDurationStrategy
     @stayGeneralDurationStrategy = strategies.stayGeneralDurationStrategy
     @travelDurationStrategy = strategies.travelDurationStrategy
+    @revisitDurationStrategy = strategies.revisitDurationStrategy
     @uuid = Random.uuid()
 
   save: () ->
@@ -35,11 +36,13 @@ class Visitor
     duration = @stayGeneralDurationStrategy()
     @stay(beacon, duration)
 
-  revisited: () =>
-    @state = "revisited"
-    beacon = Random.pickOne(@entrances)
-    duration = @stayGeneralDurationStrategy()
-    @stay(beacon, duration)
+  revisit: () =>
+    @state = "revisiting"
+    duration = @revisitDurationStrategy()
+    setTimeout((=> @nextMove()), duration)
+    @save()
+    console.info("[Sim] Visitor[uuid:#{@uuid}] #{@state} in #{duration}.")
+
 
   remove: () =>
     Visitors.remove({uuid: @uuid})
@@ -76,9 +79,9 @@ class Visitor
       when "browsed"
         [@browse, @exit]
       when "exited"
-        [@revisited, @remove]
-      when "revisited"
-        [@browse, @exit]
+        [@revisit, @remove]
+      when "revisiting"
+        [@enter]
 
 
 @Visitor = Visitor

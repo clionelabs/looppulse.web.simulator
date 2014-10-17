@@ -122,7 +122,7 @@ class VisitorFactory
       return
 
     maxVisitors = period.maxVisitors
-    remainVisitors = maxVisitors - Visitors.find().count()
+    remainVisitors = maxVisitors - Visitors.find({state: {$ne:"revisiting"}}).count()
 
     if remainVisitors <= 0
       return
@@ -149,11 +149,17 @@ class VisitorFactory
         do (secondsBetweenBeacons) ->
             return 1000 * Random.seconds(secondsBetweenBeacons.min, secondsBetweenBeacons.max)
 
+      revisitDurationStrategy = () ->
+        do () ->
+          # Randomly stay and and return in 1 to 7 days.
+          return 1000 * Random.seconds(1, 7) * 3600
+
       strategies = {
         'browseStrategy': browseStrategy,
         'stayProductDurationStrategy': stayProductDurationStrategy,
         'stayGeneralDurationStrategy': stayGeneralDurationStrategy,
-        'travelDurationStrategy': travelDurationStrategy
+        'travelDurationStrategy': travelDurationStrategy,
+        'revisitDurationStrategy': revisitDurationStrategy
       }
 
       visitor = new Visitor(@beacons, strategies)
