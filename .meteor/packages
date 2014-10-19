@@ -10,4 +10,5 @@ coffeescript
 http
 mrt:firebase
 underscore
+meteorhacks:kadira
 
