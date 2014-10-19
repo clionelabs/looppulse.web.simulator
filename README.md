@@ -139,5 +139,6 @@ A detailed sample configuration file can be found under the `server` directory.
 3. Notes
   - CategoryPreferences is currently not supported in `continuous_debug` mode.
 
-Debugging:
-  `URL="https://lp.firebaseio.com" SECRET="abc" node server/scripts/clear_firebase.js`
+To remove data on remote Firebase:
+1. `npm install firebase --save`
+2. `URL="https://lp.firebaseio.com" SECRET="abc" node server/scripts/clear_firebase.js`

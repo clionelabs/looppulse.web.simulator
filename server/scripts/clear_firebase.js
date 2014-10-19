@@ -3,6 +3,7 @@ if (!process.env.URL || !process.env.SECRET) {
   return;
 }
 
+// npm install firebase --save
 var Firebase = require("firebase");
 var firebaseUrl = process.env.URL;
 var firebaseSecret = process.env.SECRET;
