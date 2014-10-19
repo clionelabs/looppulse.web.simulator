@@ -76,7 +76,7 @@ Simulation Rules
     }
     ```
     Note: The default weight is 1.0 for all categories/products. So if no categoryPreferences are specified, then all categoreis are being picked equally likely. On the other than, a weight of 100 means it's 100 times more likely to being picked when compared to other items of weight 1.
-    
+
   - `PeriodType`
     ```
     [
@@ -110,7 +110,7 @@ Simulation Rules
       }
     ]
     ```
-    
+
   - `Period`
     ```
     [
@@ -131,10 +131,13 @@ Simulation Rules
       }
     ]
     ```
-    
+
     Note: Currently, periods are specified in a daily basis (1440 minutes). The basic unit is minute. You would explicitly mention that from minute X to minute Y is a certain period. The above example would mean that from minute 420 to minute 540 of the day (i.e. 7am to 9am) would be mealTime. Other than that, it's normal time.
-    
+
 A detailed sample configuration file can be found under the `server` directory.
-    
+
 3. Notes
-  - CategoryPreferences is currently not supported in `continuous_debug` mode. 
+  - CategoryPreferences is currently not supported in `continuous_debug` mode.
+
+Debugging:
+  `URL="https://lp.firebaseio.com" SECRET="abc" node server/scripts/clear_firebase.js`
