@@ -155,6 +155,7 @@ class VisitorFactory
           return 1000 * Random.seconds(1, 7) * 3600
 
       strategies = {
+        'visitorType': visitorType,
         'browseStrategy': browseStrategy,
         'stayProductDurationStrategy': stayProductDurationStrategy,
         'stayGeneralDurationStrategy': stayGeneralDurationStrategy,
@@ -162,8 +163,10 @@ class VisitorFactory
         'revisitDurationStrategy': revisitDurationStrategy
       }
 
-      visitor = new Visitor(@beacons, strategies)
-      visitor.enter()
+      spawn = Meteor.bindEnvironment () ->
+        visitor = new Visitor(@beacons, strategies)
+        visitor.enter()
+      spawn()
 
     console.log("[Generator] statistics", JSON.stringify(@counterSampledVisitorTypes), JSON.stringify(@counterSampledProducts))
 

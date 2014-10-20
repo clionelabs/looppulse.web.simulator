@@ -9,6 +9,7 @@ class Visitor
     @stayGeneralDurationStrategy = strategies.stayGeneralDurationStrategy
     @travelDurationStrategy = strategies.travelDurationStrategy
     @revisitDurationStrategy = strategies.revisitDurationStrategy
+    @type = strategies.visitorType
     @uuid = Random.uuid()
 
   save: () ->
@@ -18,7 +19,50 @@ class Visitor
     })
     @_id = Visitors.findOne({uuid:@uuid})._id
 
+  authenticate: () =>
+    authUrl = Meteor.settings.application.authURL
+    result = HTTP.post(authUrl, {
+      data: {
+        session: {
+          visitorUUID: @uuid,
+          sdk: '0.0',
+          device: 'simulator'
+        }
+      },
+      headers: {
+        'x-auth-token': Meteor.settings.application.token
+      }
+    })
+
+    # TODO: save session ID to be used for sending beacon events
+    # console.log("Authenticated with", authURL, JSON.stringify(result))
+    @rootFbPath = result.data.system.firebase.root
+    # @beaconEventsFbPath = result.data.system.firebase.beacon_events
+    # @engagementEventsFbPath = result.data.system.firebase.engagement_events
+    @visitorEventsFbPath = result.data.system.firebase.visitor_events
+
+    firebaseRef = new Firebase(@rootFbPath)
+    firebaseRef.auth result.data.system.firebase.token, (error, result) =>
+      if error
+        console.error('Login Failed!', @rootFbPath, error)
+      else
+        console.info('Authenticated successfully with payload:', result.auth)
+        console.info('Auth expires at:', new Date(result.expires * 1000))
+        @identify()
+
+  identify: () =>
+    doc = {
+      type: "identify",
+      visitor_uuid: @uuid,
+      external_id: @type + ' ' + @uuid
+    }
+    console.warn('identify', doc)
+    firebaseRef = new Firebase(@visitorEventsFbPath)
+    firebaseRef.push(doc)
+
   enter: () =>
+    @authenticate()
+
     @state = "entered"
     beacon = Random.pickOne(@entrances)
     duration = @stayGeneralDurationStrategy()
