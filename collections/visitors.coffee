@@ -48,13 +48,10 @@ class Visitor
     Visitors.remove({uuid: @uuid})
 
   stay: (beacon, beaconDuration) =>
-    # We could pass in rangeTillExit in the constructor but maybe we should
-    # just let Encounter to read it from the global setting file.
-    rangeTillExit = Meteor.settings.rangeTillExit
     duration = beaconDuration
 
     if beacon
-      encounter = new Encounter(this, beacon, duration, rangeTillExit)
+      encounter = new Encounter(this, beacon, duration)
       encounter.simulate()
 
     # Since we don't have teleporter yet, there should be a delay between beacons.

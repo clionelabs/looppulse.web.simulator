@@ -12,7 +12,7 @@ class FixedDebugSimulator extends @Simulator
         duration = encounterConfig.durationInSeconds * 1000
         delay = encounterConfig.delayInSeconds * 1000
 
-        encounter = new Encounter(visitor, beacon, duration, @config.rangeTillExit)
+        encounter = new Encounter(visitor, beacon, duration)
         encounter.simulate(delay)
 
     console.log("[Sim] Scheduled all encounters.")

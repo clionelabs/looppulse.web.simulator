@@ -1,9 +1,10 @@
 class Encounter
-  constructor: (visitor, beacon, duration, rangeTillExit) ->
+  constructor: (visitor, beacon, duration) ->
     @visitor = visitor
     @beacon = beacon
     @duration = duration
-    @rangeTillExit = rangeTillExit
+    @rangeTillExit = Meteor.settings.rangeTillExit
+    @skipRangeEvents = Meteor.settings.skipRangeEvents
 
   simulate: (delay=100) ->
     console.warn("[Encounter] Delay is too small! Use > 0 delay.") if (delay <= 0)
@@ -19,6 +20,8 @@ class Encounter
     event.save()
 
   simulateRangeEvents: ->
+    return if @skipRangeEvents
+
     simulateOneRangeEvent = =>
       event = new RangeEvent(@visitor, @beacon)
       event.save()
