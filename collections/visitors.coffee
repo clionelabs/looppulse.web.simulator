@@ -9,6 +9,7 @@ class Visitor
     @stayGeneralDurationStrategy = strategies.stayGeneralDurationStrategy
     @travelDurationStrategy = strategies.travelDurationStrategy
     @revisitDurationStrategy = strategies.revisitDurationStrategy
+    @type = strategies.visitorType
     @uuid = Random.uuid()
 
   save: () ->
@@ -18,7 +19,14 @@ class Visitor
     })
     @_id = Visitors.findOne({uuid:@uuid})._id
 
+  identify: () ->
+    external_id = @type + ' ' + @uuid
+    event = new IdentifyVisitorEvent(@uuid, external_id)
+    event.save()
+
   enter: () =>
+    @identify()
+
     @state = "entered"
     beacon = Random.pickOne(@entrances)
     duration = @stayGeneralDurationStrategy()
@@ -42,7 +50,9 @@ class Visitor
     setTimeout((=> @nextMove()), duration)
     @save()
     console.info("[Sim] Visitor[uuid:#{@uuid}] #{@state} in #{duration}.")
-
+    properties = {revisitingInDays: duration/1000/3600, exitedAt:(new Date()).toString()}
+    event = new TagVisitorEvent(@uuid, properties)
+    event.save()
 
   remove: () =>
     Visitors.remove({uuid: @uuid})

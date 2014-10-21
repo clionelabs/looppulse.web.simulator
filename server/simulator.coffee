@@ -2,13 +2,13 @@ class Simulator
   constructor: (simulationConfig) ->
     @config = simulationConfig
 
-  setupFirebase: (fbPath) ->
-    firebase = new Firebase(fbPath)
+  setupFirebase: (beaconEventFirebasePath, visitorEventFirebasePath) ->
+    firebase = new Firebase(beaconEventFirebasePath)
     if @config.removeOldData
       firebase.remove()
-      console.log("[Sim] Removed old data on: " + fbPath)
+      console.log("[Sim] Removed old data on: " + beaconEventFirebasePath)
 
-      console.log("[Sim] Writing simulated events to: " + fbPath)
+      console.log("[Sim] Writing simulated events to: " + beaconEventFirebasePath)
 
     Events.find().observe({
       'added': (doc) ->
@@ -25,6 +25,24 @@ class Simulator
           Events.remove({_id: doc._id})
         )
     })
+
+    if visitorEventFirebasePath
+      visitorFB = new Firebase(visitorEventFirebasePath)
+      VisitorEvents.find().observe({
+        'added': (doc) ->
+          visitorFB.push(doc, (error) ->
+            if error
+              console.log("[Firebase] Error: " + error + ",\n while simulating event: " + doc)
+            else
+              console.log("[Firebase] Published event: ", JSON.stringify(doc))
+            # We have to remove the event once processed because the
+            # Events.upsert() will eventually cause a serious back log.
+            # Another solution is to index the Events collection but that
+            # would require it to be turned into a persistent colleciotn
+            VisitorEvents.remove({_id: doc._id})
+            )
+        })
+
 
   logViewedEngagementEvents: (message) ->
     if !@engagementEventsRef
