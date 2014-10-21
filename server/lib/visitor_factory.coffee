@@ -155,6 +155,7 @@ class VisitorFactory
           return 1000 * Random.seconds(1, 7) * 3600
 
       strategies = {
+        'visitorType': visitorType.name,
         'browseStrategy': browseStrategy,
         'stayProductDurationStrategy': stayProductDurationStrategy,
         'stayGeneralDurationStrategy': stayGeneralDurationStrategy,
