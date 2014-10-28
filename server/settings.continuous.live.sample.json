@@ -1,6 +1,8 @@
 {
   "simulationMode": "continuous_live",
 
+  "timezone": "+08:00",
+
   "firebase": {
     "config": "https://looppulse-config.firebaseio.com/",
     "configSecret": "<SEE looppulse.web.manage README: Firebase Security>"

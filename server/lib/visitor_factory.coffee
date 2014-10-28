@@ -98,8 +98,10 @@ class VisitorFactory
 
   # Get current behaviour period
   getCurrentPeriod: ->
-    dt = new Date()
-    currentMinuteOfDay = dt.getMinutes() + 60 * dt.getHours()
+    timezone = if Meteor.settings.timezone != undefined then Meteor.settings.timezone else "+08:00" # default GMT+8
+    dt = moment().zone(timezone)
+    currentMinuteOfDay = parseInt(dt.format('m')) + 60 * parseInt(dt.format('H'))
+    console.log('currentMinuteOfDay', currentMinuteOfDay, ', timezone: ', timezone)
 
     for period in @periods
       if currentMinuteOfDay >= period.startMin && currentMinuteOfDay <= period.endMin
