@@ -6,7 +6,7 @@ class Event
     @major = beacon.major
     @minor = beacon.minor
     @visitor_uuid = visitor.uuid
-    @created_at = dateToString(new Date())
+    @created_at = SimClock.get().getNow().format()
 
   save: ->
     Events.upsert(this, this)
@@ -36,10 +36,6 @@ class ExitEvent extends Event
   constructor: (visitor, beacon) ->
     super(visitor, beacon)
     @type = "didExitRegion"
-
-
-dateToString = (date) ->
-  return date.toString()
 
 @EnterEvent = EnterEvent
 @RangeEvent = RangeEvent

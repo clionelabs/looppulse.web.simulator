@@ -1,5 +1,6 @@
 class Encounter
   constructor: (visitor, beacon, duration) ->
+    @simClock = SimClock.get()
     @visitor = visitor
     @beacon = beacon
     @duration = duration
@@ -8,11 +9,11 @@ class Encounter
 
   simulate: (delay=100) ->
     console.warn("[Encounter] Delay is too small! Use > 0 delay.") if (delay <= 0)
-    setTimeout((=> @simulateEvents()), delay)
+    @simClock.setTimeout((=> @simulateEvents()), delay)
 
   simulateEvents: ->
     @simulateEnterEvent()
-    @simulateRangeEvents()
+    #@simulateRangeEvents()
     @simulateExitEvent()
 
   simulateEnterEvent: ->
@@ -23,6 +24,7 @@ class Encounter
     return if @skipRangeEvents
 
     simulateOneRangeEvent = =>
+      console.log("[Encounters] simulateOneRangeEvent")
       event = new RangeEvent(@visitor, @beacon)
       event.save()
 
@@ -36,20 +38,21 @@ class Encounter
         rangeDurationInSeconds = (@duration - 1000)/1000
         rangeDurationInSeconds = 0 if rangeDurationInSeconds < 0
 
+      simClock = @simClock
       _(rangeDurationInSeconds).times(
-        (n) -> setTimeout((=> simulateOneRangeEvent()), n * 1000)
+        (n) -> simClock.setTimeout((=> simulateOneRangeEvent()), n * 1000)
       )
 
     # Delay all didRangeRegion events by 1 seconds as the first event
     # should be didEnterEvent
-    setTimeout((=> simulateAllRangeEvents()), 1000)
+    @simClock.setTimeout((=> simulateAllRangeEvents()), 1000)
 
   simulateExitEvent: ->
     simulateOneExitEvent = =>
       event = new ExitEvent(@visitor, @beacon)
       event.save()
 
-    setTimeout((=> simulateOneExitEvent()), @duration)
+    @simClock.setTimeout((=> simulateOneExitEvent()), @duration)
 
 
 @Encounter = Encounter

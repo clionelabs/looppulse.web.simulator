@@ -2,6 +2,8 @@
   "simulationMode": "continuous_live",
 
   "timezone": "+08:00",
+  "startTimeBeforeNowInSeconds": 0,
+  "speed": 1,
 
   "firebase": {
     "config": "https://looppulse-config.firebaseio.com/",
