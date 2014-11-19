@@ -1,5 +1,6 @@
 class VisitorFactory
   constructor: (behaviour, beacons, productBeaconMap, allProducts) ->
+    @simClock = SimClock.get()
     @beacons = beacons
     @behaviour = behaviour
     @periods = behaviour.periods
@@ -98,10 +99,9 @@ class VisitorFactory
 
   # Get current behaviour period
   getCurrentPeriod: ->
-    timezone = if Meteor.settings.timezone != undefined then Meteor.settings.timezone else "+08:00" # default GMT+8
-    dt = moment().zone(timezone)
+    dt = @simClock.getNow()
     currentMinuteOfDay = parseInt(dt.format('m')) + 60 * parseInt(dt.format('H'))
-    console.log('currentMinuteOfDay', currentMinuteOfDay, ', timezone: ', timezone)
+    console.log('[VisitorFactory] current: ', dt.format(), ', currentMinuteOfDay', currentMinuteOfDay)
 
     for period in @periods
       if currentMinuteOfDay >= period.startMin && currentMinuteOfDay <= period.endMin
@@ -118,7 +118,7 @@ class VisitorFactory
   generate: () ->
     period = @getCurrentPeriod()
 
-    console.log("[Generator] current period: ", JSON.stringify(period))
+    #console.log("[Generator] current period: ", JSON.stringify(period))
 
     if period == null
       return
@@ -172,8 +172,6 @@ class VisitorFactory
 
   start: () ->
     factory = @
-    setInterval ->
-       factory.generate()
-    , 5 * 1000
+    @simClock.setInterval((=> factory.generate()), 60 * 1000)
 
 @VisitorFactory = VisitorFactory

@@ -1,5 +1,6 @@
 class Simulator
   constructor: (simulationConfig) ->
+    @simClock = SimClock.get()
     @config = simulationConfig
 
   setupFirebase: (beaconEventFirebasePath, visitorEventFirebasePath) ->
@@ -48,7 +49,7 @@ class Simulator
     if !@engagementEventsRef
       return
 
-    createdAt = new Date()
+    createdAt = @simClock.getNow()
     data = {
       created_at: createdAt.toISOString()
       type: "didReceiveRemoteNotification"
@@ -76,7 +77,7 @@ class Simulator
 
       delayMilliseconds = 1000 * Random.seconds(engagementConfig.secondsBeforeViewed.min, engagementConfig.secondsBeforeViewed.max)
 
-      setTimeout ->
+      @simClock.setTimeout ->
         simulator.logViewedEngagementEvents(message)
         childSnapshot.ref().remove()
         console.log("[Sim] Message[%s] has been read", message._id)

@@ -2,6 +2,7 @@
 
 class Visitor
   constructor: (beacons, strategies) ->
+    @simClock = SimClock.get()
     @entrances = beacons.entrances
     @products = beacons.products
     @browseStrategy = strategies.browseStrategy
@@ -47,10 +48,10 @@ class Visitor
   revisit: () =>
     @state = "revisiting"
     duration = @revisitDurationStrategy()
-    setTimeout((=> @nextMove()), duration)
+    @simClock.setTimeout((=> @nextMove()), duration)
     @save()
     console.info("[Sim] Visitor[uuid:#{@uuid}] #{@state} in #{duration}.")
-    properties = {revisitingInDays: duration/1000/3600, exitedAt:(new Date()).toString()}
+    properties = {revisitingInDays: duration/1000/3600, exitedAt:@simClock.getNow().format()}
     event = new TagVisitorEvent(@uuid, properties)
     event.save()
 
@@ -68,7 +69,7 @@ class Visitor
     travelTime = @travelDurationStrategy()
 
     interval = duration + travelTime
-    setTimeout((=> @nextMove()), interval)
+    @simClock.setTimeout((=> @nextMove()), interval)
     @save()
 
     if beacon
