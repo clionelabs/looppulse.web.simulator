@@ -50,6 +50,7 @@ Simulator supports setting a virtual clock, so you can generate events for any p
     This indicates the speed of the virtual clock. speed = 1 means normal speed. For example, setting it to 1000 would make the virual clock moves a thousand times faster then real world.
 
 3. Caveat
+
 Theoretically, the virtual clock can go beyond the real world time, by setting speed > 1, and run the simulator for enough time. While the simulator will work just fine, the application dashboard might behave weirdlywhen it contains future events. Make sure you understand what you're doing if you do intend to generate future events, or otherwise, just stop your simulator before the virtual clock goes beyond real time.
 
 Simulation Rules
