@@ -35,14 +35,18 @@ Update config file:
   -  `behaviour` -> simulation rules for visitor generation and behaviourial patterns. (More explanations below)
 
 Virtual Clock
+
 1. How does it work
+
 Simulator supports setting a virtual clock, so you can generate events for any period of time, and for different speed. For example, if you want to populate data quickly for the last month to drive the application dashboard, you can set the virtual clock to be 1 month ago, with a speed of, say 1000 times. Then you will be able to populate the whole month's data quickly within an hour.
 
 2. Configurations
   - startTimeBeforeNowInSeconds
+
     This indicates the start time of the virtual clock, by referecing the number of seconds before the current time. For example, setting it to 86400 (= 60 * 60 * 24) would set the virtual clock at exactly 1 day ago when the simulator starts.
 
   - speed
+
     This indicates the speed of the virtual clock. speed = 1 means normal speed. For example, setting it to 1000 would make the virual clock moves a thousand times faster then real world.
 
 3. Caveat
