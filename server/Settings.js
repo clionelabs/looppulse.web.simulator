@@ -3,12 +3,27 @@
  */
 Settings = {
   timezone: "+08:00",
-  speed: 1,
-  startTimeBeforeNowInSeconds: 0,
+  speed: 2,
+  startTimeDeltaInSeconds: -10000,
 
   application: {
     authURL: null,
     token: null
+  },
+
+  simulationRules: {
+    day: [
+      {
+        startMin: 0,
+        endMin: 1440,
+        maxVisitor: 10,
+        browseDurationInSecs: {mean: 1000, std: 100}
+      }
+    ]
+  },
+
+  logging: {
+    showVisitorAction: true
   }
 };
 
