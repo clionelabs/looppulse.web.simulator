@@ -4,7 +4,7 @@
 Settings = {
   timezone: "+08:00",
   speed: 2,
-  startTimeDeltaInSeconds: -10000,
+  startTimeDeltaInSecs: -10000,
 
   application: {
     authURL: null,
@@ -16,14 +16,18 @@ Settings = {
       {
         startMin: 0,
         endMin: 1440,
-        maxVisitor: 10,
-        browseDurationInSecs: {mean: 1000, std: 100}
+        maxVisitor: 5,
+        visitorBehaviour: {
+          browseDurationInSecs: {mean: 10, std: 2},
+          pLeaving: 0.1 // probability leaving after browsing a poi
+        }
       }
     ]
   },
 
   logging: {
-    showVisitorAction: true
+    showVisitorAction: true,
+    showSimulatorEvents: true,
   }
 };
 

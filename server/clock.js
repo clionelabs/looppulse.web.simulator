@@ -4,8 +4,8 @@ Clock = {
   timezone: null,
   speed: null,
 
-  init: function(startTimeDeltaInSeconds, timezone, speed) {
-    this.virtualStartTime = moment().zone(timezone).add(startTimeDeltaInSeconds, 's');
+  init: function(startTimeDeltaInSecs, timezone, speed) {
+    this.virtualStartTime = moment().zone(timezone).add(startTimeDeltaInSecs, 's');
     this.realStartTime = moment();
     this.timezone = timezone;
     this.speed = speed;

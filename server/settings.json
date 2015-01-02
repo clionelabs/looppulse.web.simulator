@@ -9,13 +9,19 @@
         "startMin": 0,
         "endMin": 60,
         "maxVisitors": 10,
-        "browseDurationInSecs": {"mean": 1000, "std": 500}
+        "visitorBehaviour": { 
+          "browseDurationInSecs": {"mean": 1, "std": 0.5},
+          "pLeaving": 0.1
+        }
       },
       {
         "startMin": 60,
         "endMin": 1440,
-        "maxVisitors": 50,
-        "browseDurationInSecs": {"mean": 1000, "std": 100}
+        "maxVisitors": 1,
+        "visitorBehaviour": {
+          "browseDurationInSecs": {"mean": 10, "std": 5},
+          "pLeaving": 0.1
+        }
       }
     ]
   }
