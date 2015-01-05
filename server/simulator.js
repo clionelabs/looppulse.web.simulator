@@ -43,7 +43,8 @@ Simulator.prototype._getCurrentPeriod = function() {
 Simulator.prototype._authenticateFirebase = function() {
   var self = this;
   var firebaseRef = new Firebase(self.firebaseSettings.root);
-  firebaseRef.auth(self.firebaseSettings.secret, Meteor.bindEnvironment(function(error, authData) {
+  console.log("[Processing] authenticating with token: ", self.firebaseSettings.token);
+  firebaseRef.auth(self.firebaseSettings.token, Meteor.bindEnvironment(function(error, authData) {
     if (error) {
       console.error("[Processing] failed to authenticate firebase. Error: ", error);
     } else {
@@ -54,7 +55,7 @@ Simulator.prototype._authenticateFirebase = function() {
 
 Simulator.prototype._observeBeaconEvents = function() {
   var self = this;
-  var beaconEventRef = new Firebase(self.firebaseSettings.root + self.firebaseSettings.paths.beaconEvents);
+  var beaconEventRef = new Firebase(self.firebaseSettings.paths.beaconEvents);
   self.observeBeaconEventsHandler = BeaconEvents.find().observe({
     'added': function(beaconEvent) {
       if (Settings.logging.showSimulatorEvents) {
