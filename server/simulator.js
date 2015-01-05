@@ -1,17 +1,15 @@
-Simulator = function(beaconEventURL, pois, simulationRules) {
-  this.beaconEventURL = beaconEventURL;
+Simulator = function(firebaseSettings, pois, simulationRules) {
+  this.firebaseSettings = firebaseSettings;
   this.pois = pois;
   this.simulationRules = simulationRules;
 
   this.genVisitorsIntervalHandler = null;
   this.observeBeaconEventsHandler = null;
-
-  this.beaconEventRef = new Firebase(this.beaconEventURL);
 }
 
 Simulator.prototype.start = function() {
   var self = this;
-  self._observeBeaconEvents();
+  self._authenticateFirebase();
 
   self.genVisitorsIntervalHandler = setInterval(function() {
     var period = self._getCurrentPeriod();
@@ -42,8 +40,21 @@ Simulator.prototype._getCurrentPeriod = function() {
   return currentPeriod;
 }
 
+Simulator.prototype._authenticateFirebase = function() {
+  var self = this;
+  var firebaseRef = new Firebase(self.firebaseSettings.root);
+  firebaseRef.auth(self.firebaseSettings.secret, Meteor.bindEnvironment(function(error, authData) {
+    if (error) {
+      console.error("[Processing] failed to authenticate firebase. Error: ", error);
+    } else {
+      self._observeBeaconEvents();
+    }
+  }));
+}
+
 Simulator.prototype._observeBeaconEvents = function() {
   var self = this;
+  var beaconEventRef = new Firebase(self.firebaseSettings.root + self.firebaseSettings.paths.beaconEvents);
   self.observeBeaconEventsHandler = BeaconEvents.find().observe({
     'added': function(beaconEvent) {
       if (Settings.logging.showSimulatorEvents) {
@@ -57,7 +68,7 @@ Simulator.prototype._observeBeaconEvents = function() {
           visitor_uuid: beaconEvent.visitorUUID,
           created_at: beaconEvent.createdAt
       };
-      self.beaconEventRef.push(doc, function(error) {
+      beaconEventRef.push(doc, function(error) {
         if (error) {
           console.error('[Simulator] Error pushing beacon events: ', JSON.stringify(beaconEvent), ', error: ', error);
         }
