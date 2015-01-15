@@ -6,8 +6,8 @@ Clock.init(Settings.startTimeDeltaInSecs, Settings.timezone, Settings.speed);
 
 // Authenticate application server
 var result = Authenticator.auth(Settings.application.authURL, Settings.application.token);
-if (result.authenticate) {
-  var simulator = new Simulator(result.system.firebase, result.system.pois, Settings.simulationRules);
+if (result.authenticated) {
+  var simulator = new Simulator(result.captureId, result.system.firebase, result.system.pois, Settings.simulationRules);
   simulator.start();
 
   /*

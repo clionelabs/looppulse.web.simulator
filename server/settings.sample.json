@@ -1,6 +1,6 @@
 {
   "application": {
-    "authURL": "http://localhost:3000/api/authenticate/applications/bqGT7B7aypqXL6fkx",
+    "authURL": "http://localhost:3000/api/authenticate/applications/sJroLQhHYitwjyDqW",
     "token": "sdlfkjwoeif"
   },
   "simulationRules": {
@@ -9,7 +9,7 @@
         "startMin": 0,
         "endMin": 60,
         "maxVisitors": 10,
-        "visitorBehaviour": { 
+        "visitorBehaviour": {
           "browseDurationInSecs": {"mean": 1, "std": 0.5},
           "pLeaving": 0.1
         }

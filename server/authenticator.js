@@ -3,8 +3,8 @@ Authenticator = {};
 Authenticator.auth = function(authURL, authToken) {
   result = HTTP.post(authURL, {
     data: {
-      session: {
-        visitorUUID: '17dba1647591d871707bef5f',  // FIXME genertate this
+      capture: {
+        visitorUUID: Random.uuid(),
         sdk: '0.0',
         device: 'simulator'
       }

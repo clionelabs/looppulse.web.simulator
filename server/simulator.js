@@ -1,5 +1,6 @@
-Simulator = function(firebaseSettings, pois, simulationRules) {
+Simulator = function(captureId, firebaseSettings, pois, simulationRules) {
   this.firebaseSettings = firebaseSettings;
+  this.captureId = captureId;
   this.pois = pois;
   this.simulationRules = simulationRules;
 
@@ -67,6 +68,7 @@ Simulator.prototype._observeBeaconEvents = function() {
           minor: beaconEvent.beacon.minor,
           type: beaconEvent.type,
           visitor_uuid: beaconEvent.visitorUUID,
+          capture_id: self.captureId,
           created_at: beaconEvent.createdAt
       };
       beaconEventRef.push(doc, function(error) {
