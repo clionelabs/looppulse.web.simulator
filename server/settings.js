@@ -3,8 +3,8 @@
  */
 Settings = {
   timezone: "+08:00",
-  speed: 2,
-  startTimeDeltaInSecs: -10000,
+  speed: 1,
+  startTimeDeltaInSecs: 0,
 
   application: {
     authURL: null,
